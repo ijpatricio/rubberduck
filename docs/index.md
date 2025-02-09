@@ -31,6 +31,7 @@
     
     help me to get livewireid
     ```
+========= ABOVE THIS IS DONE =========
 - We want to click "Send" and get a response.
   - We need to eval the TAGS, replacing them with their respective "render".
   - We need an Action to get the Text/JSON, and evaluate the Prompts.
