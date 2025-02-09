@@ -8,8 +8,17 @@
     "dependencies": {
         "@anthropic-ai/sdk": "^0.36.3",
         "@tailwindcss/vite": "^4.0.5",
+        "@toycode/markdown-it-class": "^1.2.4",
         "@vitejs/plugin-vue": "^5.2.1",
         "laravel-vite-plugin": "^1.0",
+        "markdown-it": "^14.1.0",
+        "markdown-it-abbr": "^2.0.0",
+        "markdown-it-footnote": "^4.0.0",
+        "markdown-it-highlightjs": "^4.2.0",
+        "markdown-it-sub": "^2.0.0",
+        "markdown-it-sup": "^2.0.0",
+        "markdown-it-task-lists": "^2.1.1",
+        "markdown-it-toc-done-right": "^4.2.0",
         "tailwindcss": "^4.0.5",
         "vite": "^5.4",
         "vue": "^3.5.13"

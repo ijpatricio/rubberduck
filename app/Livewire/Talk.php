@@ -22,9 +22,4 @@ class Talk extends Component implements HasMingles
             'model' => config('services.anthropic.model'),
         ];
     }
-
-    public function doubleIt($amount)
-    {
-        return $amount * 2;
-    }
 }

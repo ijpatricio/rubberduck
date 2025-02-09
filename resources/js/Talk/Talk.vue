@@ -9,21 +9,39 @@
             class="textarea textarea-bordered textarea-md w-full max-w-xs"
         ></textarea>
 
-        <div>
-            <button class="btn btn-primary btn-sm" @click="demo">
-                Click me
-            </button>
+        <div class="flex flex-col gap-2">
+            <div class="mr-10">
+                Use cached response
+                <input v-model="useCache" type="checkbox" checked="checked" class="toggle toggle-sm" />
+            </div>
+            <div>
+                <button class="btn btn-primary btn-sm" @click="demo">
+                    Ask AI
+                </button>
+            </div>
         </div>
 
         <!-- Add a container to show streaming response -->
         <div class="response-container">
             {{ streamedResponse }}
         </div>
+
+        <MarkdownRenderer :source="streamedResponse" />
+
+        <div class="mt-4 flex items-center gap-2">
+            <button @click="saveResponse" class="btn btn-primary btn-outline btn-sm">
+                Cache current response
+            </button>
+        </div>
     </div>
 </template>
 
+<script setup>
+import MarkdownRenderer from "./MarkdownRenderer.vue"
+</script>
+
 <script>
-import Anthropic from "@anthropic-ai/sdk";
+import Anthropic from "@anthropic-ai/sdk"
 
 export default {
     props: {
@@ -31,21 +49,26 @@ export default {
         mingleData: Object,
     },
     data: () => ({
-        counter: 0,
+        useCache: true,
         streamedResponse: '', // Add this to store the streaming response
     }),
     methods: {
-        ask() {
-            this.wire.call('ask', this.mingleData)
+        saveResponse() {
+            localStorage.setItem('streamedResponse', this.streamedResponse)
         },
         async demo() {
+
+            if (this.useCache) {
+                this.streamedResponse = localStorage.getItem('streamedResponse')
+                return
+            }
             // Reset the streamed response
-            this.streamedResponse = '';
+            this.streamedResponse = ''
 
             const anthropic = new Anthropic({
                 apiKey: this.mingleData['api_key'],
                 dangerouslyAllowBrowser: true,
-            });
+            })
 
             // Create a streaming message
             const stream = await anthropic.messages.create({
@@ -65,24 +88,24 @@ export default {
                     }
                 ],
                 stream: true // Enable streaming
-            });
+            })
 
             // Process the stream
             try {
                 for await (const messageChunk of stream) {
                     if (messageChunk.type === 'content_block_delta') {
-                        this.streamedResponse += messageChunk.delta.text;
+                        this.streamedResponse += messageChunk.delta.text
                     }
                 }
             } catch (error) {
-                console.error('Streaming error:', error);
+                console.error('Streaming error:', error)
             }
         },
     },
 }
 </script>
 
-<style scoped>
+<style>
 .response-container {
     margin-top: 1rem;
     padding: 1rem;
