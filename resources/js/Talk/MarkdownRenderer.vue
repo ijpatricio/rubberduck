@@ -7,6 +7,7 @@ import MarkdownItSub from "markdown-it-sub"
 import MarkdownItSup from "markdown-it-sup"
 import MarkdownItTasklists from "markdown-it-task-lists"
 import MarkdownItTOC from "markdown-it-toc-done-right"
+import 'highlight.js/styles/github-dark-dimmed.min.css'
 
 const markdown = new MarkdownIt()
     .use(MarkdownItAbbr)

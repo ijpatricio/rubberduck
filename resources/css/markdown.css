@@ -33,7 +33,7 @@
 
         /* Lists */
         ul, ol {
-            @apply my-6 ml-10;
+            @apply mt-8 mb-2 ml-10;
         }
         ul {
             @apply list-disc;
@@ -57,7 +57,7 @@
 
         /* Code blocks */
         pre {
-            @apply bg-gray-100 rounded-lg p-4 mb-4 overflow-x-auto;
+            @apply ml-4 overflow-x-auto;
         }
         code {
             @apply bg-gray-100 rounded px-1 py-0.5 text-sm font-mono;

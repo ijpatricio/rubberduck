@@ -82,7 +82,7 @@ export default {
                         "content": [
                             {
                                 "type": "text",
-                                "text": "if you have to start a cms builder framework from scratch,on top of an existing framework that deals with the architecture in terms of database, web requests, etc, what entities would you have to start with?"
+                                "text": "Make a list of the TALL stack components. Show some code examples."
                             }
                         ]
                     }
