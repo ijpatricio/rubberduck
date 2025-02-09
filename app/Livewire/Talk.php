@@ -4,8 +4,10 @@ namespace App\Livewire;
 
 use Ijpatricio\Mingle\Concerns\InteractsWithMingles;
 use Ijpatricio\Mingle\Contracts\HasMingles;
+use Livewire\Attributes\Lazy;
 use Livewire\Component;
 
+#[Lazy]
 class Talk extends Component implements HasMingles
 {
     use InteractsWithMingles;
@@ -13,6 +15,13 @@ class Talk extends Component implements HasMingles
     public function component(): string
     {
         return 'resources/js/Talk/index.js';
+    }
+
+    public function placeholder()
+    {
+        return <<<'HTML'
+        <div class="skeleton h-32 w-full"></div>
+        HTML;
     }
 
     public function mingleData(): array

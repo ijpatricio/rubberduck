@@ -5,9 +5,11 @@ namespace App\Livewire;
 use App\Actions\GetFilesList;
 use Ijpatricio\Mingle\Concerns\InteractsWithMingles;
 use Ijpatricio\Mingle\Contracts\HasMingles;
+use Livewire\Attributes\Lazy;
 use Livewire\Attributes\Renderless;
 use Livewire\Component;
 
+#[Lazy]
 class PromptEditor extends Component implements HasMingles
 {
     use InteractsWithMingles;
@@ -25,6 +27,13 @@ class PromptEditor extends Component implements HasMingles
         // And, App is local, 1 user, so it's fine to use env
         /** @noinspection LaravelFunctionsInspection */
         $this->basePath = env('PROJECT_BASE_PATH');
+    }
+
+    public function placeholder()
+    {
+        return <<<'HTML'
+        <div class="skeleton h-26 w-full"></div>
+        HTML;
     }
 
     public function mingleData(): array

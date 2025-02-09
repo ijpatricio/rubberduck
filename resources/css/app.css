@@ -4,6 +4,7 @@
     themes: night --default;
 }
 
+@source "../../app";
 @source "../views";
 @source "../js";
 @source "../css";
