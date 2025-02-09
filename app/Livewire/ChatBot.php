@@ -11,6 +11,7 @@ class ChatBot extends Component
     public $prompt = 'hello, take your time';
     public $question = '';
     public $answer = '';
+    public $streamedContent = '';
 
     function submitPrompt()
     {
@@ -22,8 +23,7 @@ class ChatBot extends Component
     function ask()
     {
         try {
-            // Reset answer at the start
-            $this->answer = '';
+            $this->reset('answer', 'streamedContent');
 
             $client = new \GuzzleHttp\Client();
 
@@ -49,18 +49,18 @@ class ChatBot extends Component
 
             $buffer = '';
             $body = $response->getBody();
+            $fullResponse = '';
 
             while (!$body->eof()) {
                 $chunk = $body->read(1024);
                 $buffer .= $chunk;
 
-                // Process complete events
                 while (($newlinePosition = strpos($buffer, "\n")) !== false) {
                     $line = substr($buffer, 0, $newlinePosition);
                     $buffer = substr($buffer, $newlinePosition + 1);
 
                     if (str_starts_with($line, 'data: ')) {
-                        $jsonData = substr($line, 6); // Remove 'data: ' prefix
+                        $jsonData = substr($line, 6);
 
                         if ($jsonData === '[DONE]') {
                             continue;
@@ -70,23 +70,29 @@ class ChatBot extends Component
 
                         if (isset($data['type']) && $data['type'] === 'content_block_delta') {
                             $newText = $data['delta']['text'] ?? '';
+                            $fullResponse .= $newText;
+                            $this->streamedContent .= $newText;
 
-                            // Update both the stream and the answer property
-                            $this->answer .= $newText;
                             $this->stream(
-                                to: 'answer',
-                                content: $this->answer
+                                to: 'streamedContent',
+                                content: $this->streamedContent
                             );
                         }
                     }
                 }
             }
 
+            // Set the final complete response
+            $this->answer = $fullResponse;
+            $this->streamedContent = $fullResponse;
+
         } catch (\Exception $e) {
-            $this->answer = "Error: " . $e->getMessage();
+            $errorMessage = "Error: " . $e->getMessage();
+            $this->answer = $errorMessage;
+            $this->streamedContent = $errorMessage;
             $this->stream(
-                to: 'answer',
-                content: $this->answer
+                to: 'streamedContent',
+                content: $errorMessage
             );
         }
     }
@@ -107,7 +113,9 @@ class ChatBot extends Component
 
                         <hgroup>
                             <h3>ChatBot</h3>
-                            <p wire:stream="answer">{{ $answer }}</p>
+                            <div>
+                                <p wire:stream="streamedContent">{{ $streamedContent }}</p>
+                            </div>
                         </hgroup>
                     </article>
                 @endif
