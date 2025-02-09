@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Actions\GetFilesList;
+use App\Actions\GetRulesList;
 use Ijpatricio\Mingle\Concerns\InteractsWithMingles;
 use Ijpatricio\Mingle\Contracts\HasMingles;
 use Livewire\Attributes\Lazy;
@@ -49,6 +50,15 @@ class PromptEditor extends Component implements HasMingles
         $action = app(GetFilesList::class);
 
         return $action($query, $basePath)
+            ->toArray();
+    }
+
+    #[Renderless]
+    public function findRules($query): array
+    {
+        $action = app(GetRulesList::class);
+
+        return $action($query)
             ->toArray();
     }
 }

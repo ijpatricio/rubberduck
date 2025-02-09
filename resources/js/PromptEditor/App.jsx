@@ -1,7 +1,7 @@
 import React, {useContext} from 'react'
-import { MantineProvider, Button } from '@mantine/core'
+import {MantineProvider, Button} from '@mantine/core'
 import {WireContext} from "./PromptEditor.jsx"
-import { Mention } from './Mention'
+import {Mention} from './Mention'
 
 import {
     BlockNoteSchema,
@@ -16,10 +16,10 @@ import {
     getDefaultReactSlashMenuItems,
     useCreateBlockNote,
 } from "@blocknote/react"
-import { BlockNoteView } from "@blocknote/mantine"
+import {BlockNoteView} from "@blocknote/mantine"
 
-import { RiAlertFill } from "react-icons/ri"
-import { Alert } from "./Alert"
+import {RiAlertFill} from "react-icons/ri"
+import {Alert} from "./Alert"
 
 import "@blocknote/mantine/style.css"
 import "./static-toolbar.css"
@@ -59,11 +59,11 @@ const insertAlert = (editor) => ({
         "success",
     ],
     group: "Other",
-    icon: <RiAlertFill />,
+    icon: <RiAlertFill/>,
 })
 
 export default function App() {
-    const { wire } = useContext(WireContext)
+    const {wire} = useContext(WireContext)
 
     // Creates a new editor instance.
     const editor = useCreateBlockNote({
@@ -85,12 +85,30 @@ export default function App() {
 
     const getMentionMenuItems = async (editor, query, type) => {
 
-        let items = await wire.call('findFiles', query, wire.get('basePath'))
-        items = Array.from(items).map((item) => ({
-            title: item,
-            type: 'file',
-            value: item,
-        }))
+        let items
+
+        switch (type) {
+            case '@':
+                items = await wire.call('findFiles', query, wire.get('basePath'))
+
+                items = Array.from(items).map((item) => ({
+                    title: item,
+                    type: 'file',
+                    value: item,
+                }))
+                break
+            case '#':
+                items = await wire.call('findRules', query, wire.get('basePath'))
+
+                items = Array.from(items).map((item) => ({
+                    type: 'rule',
+                    title: item,
+                    value: item,
+                }))
+                break
+            default:
+                alert('Unknown mention type')
+        }
 
         return items.map((item) => ({
             title: item.title,
@@ -99,6 +117,7 @@ export default function App() {
                     {
                         type: 'mention',
                         props: {
+                            title: item.title,
                             type: item.type,
                             value: item.value,
                         },
@@ -170,8 +189,8 @@ export default function App() {
 
             <div>
                 <MantineProvider>
-                    <Button variant="filled" onClick={renderAsMarkdown} >See MD Lossy</Button>
-                    <Button variant="filled" onClick={renderOutputAsJSON} >See JSON</Button>
+                    <Button variant="filled" onClick={renderAsMarkdown}>See MD Lossy</Button>
+                    <Button variant="filled" onClick={renderOutputAsJSON}>See JSON</Button>
                     {/*<Button variant="filled" onClick={renderOutputAsHTML} >See HTML</Button>*/}
                     {/*<Button variant="filled" onClick={renderOutputAsHTMLLossy} >See HTML Lossy</Button>*/}
                 </MantineProvider>
