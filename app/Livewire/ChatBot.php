@@ -71,11 +71,17 @@ class ChatBot extends Component
                         if (isset($data['type']) && $data['type'] === 'content_block_delta') {
                             $newText = $data['delta']['text'] ?? '';
                             $fullResponse .= $newText;
+
+//                            ray($newText)->green();
+//                            ray($fullResponse)->red();
+//                            ray('---');
+
                             $this->streamedContent .= $newText;
 
                             $this->stream(
                                 to: 'streamedContent',
-                                content: $this->streamedContent
+                                content: $this->streamedContent,
+                                replace: true
                             );
                         }
                     }
@@ -104,6 +110,11 @@ class ChatBot extends Component
             <section>
                 <div>ChatBot</div>
 
+                <form wire:submit="submitPrompt">
+                    <input wire:model="prompt" type="text" placeholder="Send a message" autofocus>
+                    <button type="submit">Send</button>
+                </form>
+
                 @if ($question)
                     <article>
                         <hgroup>
@@ -121,10 +132,6 @@ class ChatBot extends Component
                 @endif
             </section>
 
-            <form wire:submit="submitPrompt">
-                <input wire:model="prompt" type="text" placeholder="Send a message" autofocus>
-                <button type="submit">Send</button>
-            </form>
         </div>
         HTML;
     }
