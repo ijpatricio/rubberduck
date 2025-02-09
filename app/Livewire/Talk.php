@@ -20,7 +20,7 @@ class Talk extends Component implements HasMingles
     public function placeholder()
     {
         return <<<'HTML'
-        <div class="skeleton h-32 w-full"></div>
+        <div class="skeleton h-56 w-full"></div>
         HTML;
     }
 
