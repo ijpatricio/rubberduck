@@ -85,24 +85,18 @@ export default function App() {
 
     const getMentionMenuItems = async (editor, query) => {
 
-        const files = await wire.call('findFiles', query, '~/code/ijpatricio/frey-bike-schweiz')
+        let files = await wire.call('findFiles', query, wire.get('basePath'))
 
-        const users = [
-            'Steve', 'Bob', 'Joe', 'Mike', 'John', 'Alice', 'Eve', 'Mallory', 'Trudy', 'Carol', 'Dave', 'Frank', 'Grace', 'Heidi', 'Ivan', 'Judy', 'Mallory', 'Oscar', 'Peggy', 'Randy', 'Sybil', 'Trent', 'Victor', 'Walter', 'Xavier', 'Yvonne', 'Zelda'
-        ]
+        files = Array.from(files)
 
-        const randomUsers = users
-            .sort(() => Math.random() - 0.5)
-            .slice(0, 5)
-
-        return randomUsers.map((user) => ({
-            title: user,
+        return files.map((file) => ({
+            title: file,
             onItemClick: () => {
                 editor.insertInlineContent([
                     {
                         type: 'mention',
                         props: {
-                            user,
+                            file,
                         },
                     },
                     ' ', // add a space after the mention

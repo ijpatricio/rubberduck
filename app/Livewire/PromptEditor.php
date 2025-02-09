@@ -2,7 +2,6 @@
 
 namespace App\Livewire;
 
-use App\DTOs\FileInfo;
 use App\Helpers\Finder;
 use Ijpatricio\Mingle\Concerns\InteractsWithMingles;
 use Ijpatricio\Mingle\Contracts\HasMingles;
@@ -10,15 +9,25 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Livewire\Attributes\Renderless;
 use Livewire\Component;
-use SplFileInfo;
+use Symfony\Component\Finder\SplFileInfo;
 
 class PromptEditor extends Component implements HasMingles
 {
     use InteractsWithMingles;
 
+    public string $basePath;
+
     public function component(): string
     {
         return 'resources/js/PromptEditor/index.js';
+    }
+
+    public function mount()
+    {
+        // This is going to be coming from Database model
+        // And, App is local, 1 user, so it's fine to use env
+        /** @noinspection LaravelFunctionsInspection */
+        $this->basePath = env('PROJECT_BASE_PATH');
     }
 
     public function mingleData(): array
@@ -29,15 +38,17 @@ class PromptEditor extends Component implements HasMingles
     }
 
     #[Renderless]
-    public function findFiles($query, $basePath): Collection
+    public function findFiles($query, $basePath): array
     {
-        ray($query, $basePath);
+        if (!File::exists($basePath)) {
+            dd("The configured Path [{$basePath}] does not exist!");
+        }
 
-        return collect();
+        $basePath = str($basePath)->finish('/');
 
         $files = collect(
             Finder::find(
-                base_path(str($relativePath)->start('/')),
+                $basePath,
                 [
                     'node_modules',
                     'vendor',
@@ -52,8 +63,22 @@ class PromptEditor extends Component implements HasMingles
         );
 
         return $files
-            ->map(function ($file) {
-                return str_replace(base_path('/'), '', $file->getRealPath());
-            });
+            ->map(
+                fn(SplFileInfo $file) => str($file->getRealPath())
+                    ->replace($basePath, '')
+                    ->value()
+            )
+            ->filter(function ($file) use ($query) {
+
+                // If no search, return all files
+                if (blank($query)) {
+                    return true;
+                }
+
+                return str($file)->lower()->contains(
+                    str($query)->lower()
+                );
+            })
+            ->toArray();
     }
 }

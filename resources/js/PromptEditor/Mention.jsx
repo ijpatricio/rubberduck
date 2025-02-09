@@ -6,7 +6,7 @@ export const Mention = createReactInlineContentSpec(
     {
         type: "mention",
         propSchema: {
-            user: {
+            file: {
                 default: "Unknown",
             },
         },
@@ -15,7 +15,7 @@ export const Mention = createReactInlineContentSpec(
     {
         render: (props) => (
             <span className={"bg-green-800"}>
-                @{props.inlineContent.props.user}
+                @{props.inlineContent.props.file}
             </span>
         ),
     }
