@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use Ijpatricio\Mingle\Concerns\InteractsWithMingles;
 use Ijpatricio\Mingle\Contracts\HasMingles;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 
 class Talk extends Component implements HasMingles

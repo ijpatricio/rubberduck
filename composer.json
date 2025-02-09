@@ -4,26 +4,24 @@
     "description": "Talk to the rubber duck and get answers!",
     "keywords": [
         "laravel",
-        "framework",
-        "filamentphp",
-        "filament",
+        "livewire",
         "php",
-        "starter",
-        "template",
-        "boilerplate"
+        "mingle",
+        "minglejs",
+        "ai",
+        "claude",
+        "anthropic",
+        "daisyui"
     ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
-        "filament/filament": "^3.2",
         "ijpatricio/mingle": "^0.0.20",
         "laravel/framework": "^11.9",
         "laravel/pail": "^1.2",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.5",
-        "robsontenorio/mary": "^1.41",
-        "spatie/laravel-ray": "^1.39",
-        "timokoerber/laravel-one-time-operations": "^1.4"
+        "spatie/laravel-ray": "^1.39"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.13",
@@ -42,10 +40,7 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        },
-        "files": [
-            "app/Helpers.php"
-        ]
+        }
     },
     "autoload-dev": {
         "psr-4": {
@@ -55,15 +50,12 @@
     "scripts": {
         "pest": "./vendor/bin/pest --parallel",
         "pint": "./vendor/bin/pint",
-        "phpstan": "./vendor/bin/phpstan analyse",
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi",
-            "@php artisan filament:upgrade"
+            "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
-            "@php artisan icons:cache"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
@@ -74,8 +66,7 @@
         ],
         "review": [
             "@pint",
-            "@pest",
-            "@phpstan"
+            "@pest"
         ]
     },
     "extra": {

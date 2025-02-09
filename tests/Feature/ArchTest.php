@@ -1,5 +1,5 @@
 <?php
 
-arch('No debugging statements are left in our code.')
+arch('Debug statements')
     ->expect(['dd', 'dump', 'ray'])
     ->not->toBeUsed();
