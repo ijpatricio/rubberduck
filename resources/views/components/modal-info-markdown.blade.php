@@ -22,7 +22,13 @@
 <button class="btn btn-ghost btn-xs" onclick="{{ $modalId }}.showModal()">{{ $title }}</button>
 
 <dialog id="{{ $modalId }}" class="modal">
-    <div class="modal-box">
+    <div class="modal-box w-11/12 max-w-5xl">
+
+        <!-- Close button top right -->
+        <form method="dialog">
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+
         <h3 class="text-lg font-bold">{{ $title ?? '' }}</h3>
 
         @isset($viewContents)
@@ -31,11 +37,17 @@
             </div>
         @endif
 
+        <!-- Close button footer -->
         <div class="modal-action">
             <form method="dialog">
                 <!-- if there is a button in form, it will close the modal -->
                 <button class="btn">Close</button>
             </form>
         </div>
+
+        <!-- Close by click Esc key and click-outside -->
+        <form method="dialog" class="modal-backdrop hidden">
+            <button>close</button>
+        </form>
     </div>
 </dialog>

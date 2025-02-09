@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Helpers\Finder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\File;
@@ -14,7 +15,7 @@ class ScavengeProject extends Command
      *
      * @var string
      */
-    protected $signature = 'app:scavenge-project {path}';
+    protected $signature = 'app:scavenge-project {path?}';
 
     /**
      * The console command description.
@@ -28,9 +29,25 @@ class ScavengeProject extends Command
      */
     public function handle()
     {
+        $relativePath = $this->argument('path');
+
         $files = collect(
-            File::allFiles(app_path())
+            Finder::find(
+                base_path(str($relativePath)->start('/')),
+                [
+                    'node_modules',
+                    'vendor',
+                    '.git',
+                    '.idea',
+                    '.vscode',
+                    'public',
+                    'storage',
+                    'tests',
+                ]
+            )
         );
+
+        dd($files->map(fn($file) => str_replace(base_path('/'), '', $file->getRealPath())));
 
         $filesCompiled = $files->map(function (\SplFileInfo $file) {
 

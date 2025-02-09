@@ -1,15 +1,16 @@
-import React from 'react'
-
-import { useCreateBlockNote } from "@blocknote/react";
+import React, { createContext } from 'react'
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/mantine/style.css";
+export const WireContext = createContext(null);
 
 import App from "./App";
 
 function PromptEditor({wire, mingleData}) {
 
     return (
-        <App wire={wire} />
+        <WireContext.Provider value={{wire, mingleData}}>
+            <App />
+        </WireContext.Provider>
     )
 }
 

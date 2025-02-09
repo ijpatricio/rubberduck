@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import { MantineProvider, Button } from '@mantine/core'
-import { FormattingToolbar } from '@blocknote/react'
+import {WireContext} from "./PromptEditor.jsx"
 import { Mention } from './Mention'
 
 import {
@@ -133,6 +133,9 @@ export default function App(wire) {
         )
     }
 
+
+
+
     // Renders the editor instance.
     return (
         <>
@@ -155,24 +158,21 @@ export default function App(wire) {
 
                 <SuggestionMenuController
                     triggerCharacter={'@'}
-                    getItems={async (query) =>
-                        // Gets the mentions menu items
-                        filterSuggestionItems(getMentionMenuItems(editor), query)
-                    }
+                    getItems={async (query) => filterSuggestionItems(getMentionMenuItems(editor, query), query)}
                 />
             </BlockNoteView>
 
             <ul className={'mt-2 text-xs text-gray-500'}>
                 <li>Press the '/' key to open the Slash Menu.</li>
-                <li>Press the '#' key to refer a file.</li>
+                <li>Press the '@' key to refer a file.</li>
             </ul>
 
             <div>
                 <MantineProvider>
                     <Button variant="filled" onClick={renderAsMarkdown} >See MD Lossy</Button>
+                    <Button variant="filled" onClick={renderOutputAsJSON} >See JSON</Button>
                     {/*<Button variant="filled" onClick={renderOutputAsHTML} >See HTML</Button>*/}
                     {/*<Button variant="filled" onClick={renderOutputAsHTMLLossy} >See HTML Lossy</Button>*/}
-                    {/*<Button variant="filled" onClick={renderOutputAsJSON} >See JSON</Button>*/}
                 </MantineProvider>
             </div>
         </>

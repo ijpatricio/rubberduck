@@ -1,4 +1,5 @@
-import {createReactInlineContentSpec} from "@blocknote/react";
+import React, {useContext} from "react"
+import {createReactInlineContentSpec} from "@blocknote/react"
 
 // The Mention inline content.
 export const Mention = createReactInlineContentSpec(
@@ -13,9 +14,9 @@ export const Mention = createReactInlineContentSpec(
     },
     {
         render: (props) => (
-            <span style={{backgroundColor: "#8ADA55"}}>
+            <span className={"bg-green-800"}>
                 @{props.inlineContent.props.user}
             </span>
         ),
     }
-);
+)
