@@ -7,19 +7,8 @@ import MarkdownItSub from "markdown-it-sub"
 import MarkdownItSup from "markdown-it-sup"
 import MarkdownItTasklists from "markdown-it-task-lists"
 import MarkdownItTOC from "markdown-it-toc-done-right"
-import markdownItClass from "@toycode/markdown-it-class"
 
-const mapping = {
-    h1: ['text-4xl', 'text-red-400', 'font-bold'],
-    p: ['text-red-400', 'font-bold'],
-    a: ['text-blue-300', 'hover:underline'],
-};
-
-const markdown = new MarkdownIt({
-        html: true,
-        linkify: true,
-    })
-    .use(markdownItClass, { mapping })
+const markdown = new MarkdownIt()
     .use(MarkdownItAbbr)
     .use(MarkdownItFootnote)
     .use(MarkdownItHighlightjs)
@@ -43,5 +32,8 @@ export default {
 </script>
 
 <template>
-    <div v-html="markdown.render(source)" />
+    <div class="w-full flex justify-between gap-4">
+        <div class="border p-2 rounded-lg typography" v-html="markdown.render(source)" />
+        <div class="border p-2 rounded-lg whitespace-pre-wrap" v-text="source" />
+    </div>
 </template>

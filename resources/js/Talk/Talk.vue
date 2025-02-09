@@ -1,18 +1,20 @@
 <template>
     <div>
-        <textarea
-            placeholder="System prompt"
-            class="textarea textarea-bordered textarea-md w-full max-w-xs"
-        ></textarea>
-        <textarea
-            placeholder="Ask a question"
-            class="textarea textarea-bordered textarea-md w-full max-w-xs"
-        ></textarea>
+        <div class="w-full flex justify-between gap-4">
+            <textarea
+                placeholder="System prompt"
+                class="textarea textarea-bordered textarea-md w-full"
+            ></textarea>
+            <textarea
+                placeholder="Ask a question"
+                class="textarea textarea-bordered textarea-md w-full"
+            ></textarea>
+        </div>
 
         <div class="flex flex-col gap-2">
             <div class="mr-10">
                 Use cached response
-                <input v-model="useCache" type="checkbox" checked="checked" class="toggle toggle-sm" />
+                <input v-model="useCache" type="checkbox" checked="checked" class="toggle toggle-sm"/>
             </div>
             <div>
                 <button class="btn btn-primary btn-sm" @click="demo">
@@ -21,12 +23,7 @@
             </div>
         </div>
 
-        <!-- Add a container to show streaming response -->
-        <div class="response-container">
-            {{ streamedResponse }}
-        </div>
-
-        <MarkdownRenderer :source="streamedResponse" />
+        <MarkdownRenderer class="mt-10" :source="streamedResponse"/>
 
         <div class="mt-4 flex items-center gap-2">
             <button @click="saveResponse" class="btn btn-primary btn-outline btn-sm">
@@ -52,6 +49,9 @@ export default {
         useCache: true,
         streamedResponse: '', // Add this to store the streaming response
     }),
+    mounted() {
+        this.streamedResponse = localStorage.getItem('streamedResponse') || ''
+    },
     methods: {
         saveResponse() {
             localStorage.setItem('streamedResponse', this.streamedResponse)
@@ -87,7 +87,9 @@ export default {
                         ]
                     }
                 ],
-                stream: true // Enable streaming
+
+                // Enable streaming
+                stream: true,
             })
 
             // Process the stream

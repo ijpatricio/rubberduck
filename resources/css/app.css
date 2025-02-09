@@ -6,3 +6,11 @@
 
 @source "../views";
 @source "../js";
+
+@layer components {
+    .typography {
+        p {
+            @apply bg-red-400;
+        }
+    }
+}
