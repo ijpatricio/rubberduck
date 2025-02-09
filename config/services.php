@@ -16,6 +16,7 @@ return [
 
     'anthropic' => [
         'api_key' => env('ANTHROPIC_KEY'),
+        'model' => env('ANTHROPIC_MODEL', 'claude-3-5-sonnet-latest'),
     ],
 
     'postmark' => [

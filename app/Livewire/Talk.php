@@ -18,7 +18,8 @@ class Talk extends Component implements HasMingles
     public function mingleData(): array
     {
         return [
-            'message' => 'Message in a bottle 🍾',
+            'api_key' => config('services.anthropic.api_key'),
+            'model' => config('services.anthropic.model'),
         ];
     }
 

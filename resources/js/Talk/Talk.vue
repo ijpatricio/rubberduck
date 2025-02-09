@@ -43,13 +43,13 @@ export default {
             this.streamedResponse = '';
 
             const anthropic = new Anthropic({
-                apiKey: import.meta.env.VITE_ANTHROPIC_KEY,
+                apiKey: this.mingleData['api_key'],
                 dangerouslyAllowBrowser: true,
             });
 
             // Create a streaming message
             const stream = await anthropic.messages.create({
-                model: "claude-3-5-sonnet-20241022",
+                model: this.mingleData.model,
                 max_tokens: 4096,
                 temperature: 0,
                 system: "Act as a successful developer that has over 20 years of experience, at designing web applications, using all CMS in the world, and a lot of publishing experience across many generalist and niche topics.",
