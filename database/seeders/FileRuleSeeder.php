@@ -18,6 +18,12 @@ class FileRuleSeeder extends Seeder
         }
 
         File::put($filePath, $this->content());
+
+        if (File::exists($filePath = storage_path('app/rules/first-two.txt'))) {
+            return;
+        }
+
+        File::put($filePath, $this->content());
     }
 
     private function content():string

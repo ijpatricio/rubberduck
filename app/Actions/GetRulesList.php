@@ -19,11 +19,25 @@ class GetRulesList
         // Get all files from the rules directory
         $files = collect(File::allFiles($rulesPath));
 
-        return $files->map(function (SplFileInfo $file) {
+        return $files
+            ->map(function (SplFileInfo $file) {
 
-            $filename = $file->getFilename();
+                $filename = $file->getFilename();
 
-            return $filename;
-        })->values();
+                return $filename;
+            })->filter(function (string $file) use ($query) {
+
+                // If no search, return all files
+                if (blank($query)) {
+                    return true;
+                }
+
+                $shouldKeep = str($file)->lower()->contains(
+                    str($query)->lower()->value()
+                );
+
+                return $shouldKeep;
+            })
+            ->values();
     }
 }
