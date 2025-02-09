@@ -21,6 +21,7 @@ import {BlockNoteView} from "@blocknote/mantine"
 import {RiAlertFill} from "react-icons/ri"
 import {Alert} from "./Alert"
 
+import "@blocknote/core/fonts/inter.css"
 import "@blocknote/mantine/style.css"
 import "./static-toolbar.css"
 
@@ -62,25 +63,15 @@ const insertAlert = (editor) => ({
     icon: <RiAlertFill/>,
 })
 
-export default function App() {
+// Create an Editor component for reusability
+function Editor({initialContent}) {
     const {wire} = useContext(WireContext)
 
     // Creates a new editor instance.
     const editor = useCreateBlockNote({
         schema,
-        initialContent: [
-            {
-                "id": "f0149aad-cbc5-41bf-9791-d8181a6de1c4",
-                "type": "paragraph",
-                "props": {
-                    "textColor": "default",
-                    "backgroundColor": "default",
-                    "textAlignment": "left"
-                },
-                "content": [],
-                "children": []
-            }
-        ],
+        initialContent,
+        sideMenuDetection: "editor"
     })
 
     const getMentionMenuItems = async (editor, query, type) => {
@@ -154,13 +145,12 @@ export default function App() {
 
     // Renders the editor instance.
     return (
-        <>
+        <div className={'w-full'}>
             <BlockNoteView editor={editor} slashMenu={false} formattingToolbar={false}>
-                {/* Replaces the default Slash Menu. */}
+
                 <SuggestionMenuController
                     triggerCharacter={"/"}
                     getItems={async (query) =>
-                        // Gets all default slash menu items and `insertAlert` item.
                         filterSuggestionItems(
                             [
                                 ...getDefaultReactSlashMenuItems(editor),
@@ -184,17 +174,37 @@ export default function App() {
 
             <ul className={'mt-2 text-xs text-gray-500'}>
                 <li>Press the '/' key to open the Slash Menu.</li>
-                <li>Press the '@' key to refer a file.</li>
+                <li>Press the '@' key to refer a File.</li>
+                <li>Press the '#' key to refer a Rule.</li>
             </ul>
 
-            <div>
-                <MantineProvider>
-                    <Button variant="filled" onClick={renderAsMarkdown}>See MD Lossy</Button>
-                    <Button variant="filled" onClick={renderOutputAsJSON}>See JSON</Button>
-                    {/*<Button variant="filled" onClick={renderOutputAsHTML} >See HTML</Button>*/}
-                    {/*<Button variant="filled" onClick={renderOutputAsHTMLLossy} >See HTML Lossy</Button>*/}
-                </MantineProvider>
-            </div>
-        </>
+            <MantineProvider>
+                <Button variant="filled" onClick={renderAsMarkdown}>See MD Lossy</Button>
+                <Button variant="filled" onClick={renderOutputAsJSON}>See JSON</Button>
+                {/*<Button variant="filled" onClick={renderOutputAsHTML} >See HTML</Button>*/}
+                {/*<Button variant="filled" onClick={renderOutputAsHTMLLossy} >See HTML Lossy</Button>*/}
+            </MantineProvider>
+        </div>
+    )
+}
+
+// Main App component
+export default function App() {
+    return (
+        <Editor
+            initialContent={[
+                {
+                    type: "paragraph",
+                    content: "Welcome to this demo!",
+                },
+                {
+                    type: "paragraph",
+                    content: "This is a block in the first editor",
+                },
+                {
+                    type: "paragraph",
+                },
+            ]}
+        />
     )
 }
