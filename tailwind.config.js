@@ -3,82 +3,61 @@ import defaultTheme from 'tailwindcss/defaultTheme'
 
 /** @type {import('tailwindcss').Config} */
 export default {
-    darkMode: 'class',
+
+    darkMode: ['selector', '[data-theme="night"]'],
+
     content: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './storage/framework/views/*.php',
-        './resources/views/**/*.blade.php',
-        './resources/js/**/*.{js,jsx,vue}',
-    ],
+		'./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+		 './storage/framework/views/*.php',
+		 './resources/views/**/*.blade.php',
+		 './resources/js/**/*.{js,jsx,vue}',
+		 "./vendor/robsontenorio/mary/src/View/Components/**/*.php"
+	],
 
     theme: {
-        container: {
-            center: true,
-            padding: '2rem',
-            screens: {
-                '2xl': '1400px',
-            },
-        },
         extend: {
-            colors: {
-                border: 'hsl(var(--border))',
-                input: 'hsl(var(--input))',
-                ring: 'hsl(var(--ring))',
-                background: 'hsl(var(--background))',
-                foreground: 'hsl(var(--foreground))',
-                primary: {
-                    DEFAULT: 'hsl(var(--primary))',
-                    foreground: 'hsl(var(--primary-foreground))',
-                },
-                secondary: {
-                    DEFAULT: 'hsl(var(--secondary))',
-                    foreground: 'hsl(var(--secondary-foreground))',
-                },
-                destructive: {
-                    DEFAULT: 'hsl(var(--destructive))',
-                    foreground: 'hsl(var(--destructive-foreground))',
-                },
-                muted: {
-                    DEFAULT: 'hsl(var(--muted))',
-                    foreground: 'hsl(var(--muted-foreground))',
-                },
-                accent: {
-                    DEFAULT: 'hsl(var(--accent))',
-                    foreground: 'hsl(var(--accent-foreground))',
-                },
-                popover: {
-                    DEFAULT: 'hsl(var(--popover))',
-                    foreground: 'hsl(var(--popover-foreground))',
-                },
-                card: {
-                    DEFAULT: 'hsl(var(--card))',
-                    foreground: 'hsl(var(--card-foreground))',
-                },
-            },
-            borderRadius: {
-                lg: 'var(--radius)',
-                md: 'calc(var(--radius) - 2px)',
-                sm: 'calc(var(--radius) - 4px)',
-            },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-            },
-            keyframes: {
-                'accordion-down': {
-                    from: { height: 0 },
-                    to: { height: 'var(--radix-accordion-content-height)' },
-                },
-                'accordion-up': {
-                    from: { height: 'var(--radix-accordion-content-height)' },
-                    to: { height: 0 },
-                },
-            },
-            animation: {
-                'accordion-down': 'accordion-down 0.2s ease-out',
-                'accordion-up': 'accordion-up 0.2s ease-out',
             },
         },
     },
 
-    plugins: [forms, require('tailwindcss-animate')],
+    plugins: [
+        forms,
+		require("daisyui")
+	],
+
+    daisyui: {
+        // themes: false: only light + dark | true: all themes | array: specific themes like this ["light", "dark", "cupcake"]
+        themes: [
+            {
+                corporate: {
+                    "color-scheme": "light",
+                    "primary": "oklch(60.39% 0.228 269.1)",
+                    "secondary": "#7b92b2",
+                    "accent": "#67cba0",
+                    "neutral": "#181a2a",
+                    "neutral-content": "#edf2f7",
+                    "base-100": "oklch(100% 0 0)",
+                    "base-content": "#181a2a",
+                    // "base-content": "#181a2a",
+                    "--rounded-box": "0.25rem",
+                    "--rounded-btn": ".325rem",
+                    "--rounded-badge": ".125rem",
+                    "--tab-radius": "0.25rem",
+                    "--animation-btn": "0",
+                    "--animation-input": "0",
+                    "--btn-focus-scale": "1",
+                },
+            },
+        ],
+        darkTheme: "dark", // name of one of the included themes for dark mode
+        base: true, // applies background color and foreground color for root element by default
+        styled: true, // include daisyUI colors and design decisions for all components
+        utils: true, // adds responsive and modifier utility classes
+        prefix: "", // prefix for daisyUI classnames (components, modifiers and responsive class names. Not colors)
+        logs: true, // Shows info about daisyUI version and used config in the console when building your CSS
+        themeRoot: ":root", // The element that receives theme color CSS variables
+    },
+
 }

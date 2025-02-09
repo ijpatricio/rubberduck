@@ -20,6 +20,8 @@
         "laravel/framework": "^11.9",
         "laravel/pail": "^1.2",
         "laravel/tinker": "^2.9",
+        "livewire/livewire": "^3.5",
+        "robsontenorio/mary": "^1.41",
         "spatie/laravel-ray": "^1.39",
         "timokoerber/laravel-one-time-operations": "^1.4"
     },
