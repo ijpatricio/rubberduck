@@ -2,14 +2,11 @@
 
 namespace App\Livewire;
 
-use App\Helpers\Finder;
+use App\Actions\GetFilesList;
 use Ijpatricio\Mingle\Concerns\InteractsWithMingles;
 use Ijpatricio\Mingle\Contracts\HasMingles;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\File;
 use Livewire\Attributes\Renderless;
 use Livewire\Component;
-use Symfony\Component\Finder\SplFileInfo;
 
 class PromptEditor extends Component implements HasMingles
 {
@@ -40,45 +37,9 @@ class PromptEditor extends Component implements HasMingles
     #[Renderless]
     public function findFiles($query, $basePath): array
     {
-        if (!File::exists($basePath)) {
-            dd("The configured Path [{$basePath}] does not exist!");
-        }
+        $action = app(GetFilesList::class);
 
-        $basePath = str($basePath)->finish('/');
-
-        $files = collect(
-            Finder::find(
-                $basePath,
-                [
-                    'node_modules',
-                    'vendor',
-                    '.git',
-                    '.idea',
-                    '.vscode',
-                    'public',
-                    'storage',
-                    'tests',
-                ]
-            )
-        );
-
-        return $files
-            ->map(
-                fn(SplFileInfo $file) => str($file->getRealPath())
-                    ->replace($basePath, '')
-                    ->value()
-            )
-            ->filter(function ($file) use ($query) {
-
-                // If no search, return all files
-                if (blank($query)) {
-                    return true;
-                }
-
-                return str($file)->lower()->contains(
-                    str($query)->lower()
-                );
-            })
+        return $action($query, $basePath)
             ->toArray();
     }
 }
