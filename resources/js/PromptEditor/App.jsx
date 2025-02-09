@@ -62,37 +62,9 @@ const insertAlert = (editor) => ({
     icon: <RiAlertFill />,
 })
 
-// Function which gets all users for the mentions menu.
-const getMentionMenuItems = async (editor) => {
+export default function App() {
+    const { wire } = useContext(WireContext)
 
-    const wire = useContext(WireContext)
-
-    const users = [
-        'Steve', 'Bob', 'Joe', 'Mike', 'John', 'Alice', 'Eve', 'Mallory', 'Trudy', 'Carol', 'Dave', 'Frank', 'Grace', 'Heidi', 'Ivan', 'Judy', 'Mallory', 'Oscar', 'Peggy', 'Randy', 'Sybil', 'Trent', 'Victor', 'Walter', 'Xavier', 'Yvonne', 'Zelda'
-    ]
-
-    const randomUsers = users
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 5)
-
-    return randomUsers.map((user) => ({
-        title: user,
-        onItemClick: () => {
-            editor.insertInlineContent([
-                {
-                    type: 'mention',
-                    props: {
-                        user,
-                    },
-                },
-                ' ', // add a space after the mention
-            ])
-        },
-    }))
-}
-
-
-export default function App(wire) {
     // Creates a new editor instance.
     const editor = useCreateBlockNote({
         schema,
@@ -110,6 +82,34 @@ export default function App(wire) {
             }
         ],
     })
+
+    const getMentionMenuItems = async (editor, query) => {
+
+        const files = await wire.call('findFiles', query, '~/code/ijpatricio/frey-bike-schweiz')
+
+        const users = [
+            'Steve', 'Bob', 'Joe', 'Mike', 'John', 'Alice', 'Eve', 'Mallory', 'Trudy', 'Carol', 'Dave', 'Frank', 'Grace', 'Heidi', 'Ivan', 'Judy', 'Mallory', 'Oscar', 'Peggy', 'Randy', 'Sybil', 'Trent', 'Victor', 'Walter', 'Xavier', 'Yvonne', 'Zelda'
+        ]
+
+        const randomUsers = users
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 5)
+
+        return randomUsers.map((user) => ({
+            title: user,
+            onItemClick: () => {
+                editor.insertInlineContent([
+                    {
+                        type: 'mention',
+                        props: {
+                            user,
+                        },
+                    },
+                    ' ', // add a space after the mention
+                ])
+            },
+        }))
+    }
 
     const renderAsMarkdown = async () => {
         console.log(
@@ -135,14 +135,10 @@ export default function App(wire) {
         )
     }
 
-
-
-
     // Renders the editor instance.
     return (
         <>
             <BlockNoteView editor={editor} slashMenu={false} formattingToolbar={false}>
-
                 {/* Replaces the default Slash Menu. */}
                 <SuggestionMenuController
                     triggerCharacter={"/"}
@@ -160,7 +156,7 @@ export default function App(wire) {
 
                 <SuggestionMenuController
                     triggerCharacter={'@'}
-                    getItems={async (query) => filterSuggestionItems(getMentionMenuItems(editor, query), query)}
+                    getItems={async (query) => filterSuggestionItems(await getMentionMenuItems(editor, query), query)}
                 />
             </BlockNoteView>
 
@@ -180,4 +176,3 @@ export default function App(wire) {
         </>
     )
 }
-

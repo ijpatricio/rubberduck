@@ -29,7 +29,7 @@ class PromptEditor extends Component implements HasMingles
     }
 
     #[Renderless]
-    public function findFile($query, $basePath): Collection
+    public function findFiles($query, $basePath): Collection
     {
         ray($query, $basePath);
 
