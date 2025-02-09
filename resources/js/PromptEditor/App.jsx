@@ -83,20 +83,24 @@ export default function App() {
         ],
     })
 
-    const getMentionMenuItems = async (editor, query) => {
+    const getMentionMenuItems = async (editor, query, type) => {
 
-        let files = await wire.call('findFiles', query, wire.get('basePath'))
+        let items = await wire.call('findFiles', query, wire.get('basePath'))
+        items = Array.from(items).map((item) => ({
+            title: item,
+            type: 'file',
+            value: item,
+        }))
 
-        files = Array.from(files)
-
-        return files.map((file) => ({
-            title: file,
+        return items.map((item) => ({
+            title: item.title,
             onItemClick: () => {
                 editor.insertInlineContent([
                     {
                         type: 'mention',
                         props: {
-                            file,
+                            type: item.type,
+                            value: item.value,
                         },
                     },
                     ' ', // add a space after the mention
@@ -150,7 +154,12 @@ export default function App() {
 
                 <SuggestionMenuController
                     triggerCharacter={'@'}
-                    getItems={async (query) => filterSuggestionItems(await getMentionMenuItems(editor, query), query)}
+                    getItems={async (query) => filterSuggestionItems(await getMentionMenuItems(editor, query, '@'), query)}
+                />
+
+                <SuggestionMenuController
+                    triggerCharacter={'#'}
+                    getItems={async (query) => filterSuggestionItems(await getMentionMenuItems(editor, query, '#'), query)}
                 />
             </BlockNoteView>
 

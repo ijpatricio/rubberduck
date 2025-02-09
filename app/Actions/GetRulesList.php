@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\DTOs\Rule;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 class GetRulesList
 {
@@ -12,11 +13,23 @@ class GetRulesList
      */
     public function __invoke(): Collection
     {
-        // collection of Rule
-        // List of rules = all files in storage_path('rules')
-        // key => filename (complete with extension)
-        // value => file content
+        $rulesPath = storage_path('rules');
+        
+        // Get all files from the rules directory
+        $files = collect(glob($rulesPath . '/*'));
 
-        return collect();
+        dd($files);
+        
+        return $files->mapWithKeys(function ($filePath) {
+            $filename = basename($filePath);
+            $content = file_get_contents($filePath);
+            
+            return [
+                $filename => new Rule(
+                    name: $filename,
+                    content: $content
+                )
+            ];
+        });
     }
 }
