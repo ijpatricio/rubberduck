@@ -7,13 +7,13 @@ use Ijpatricio\Mingle\Contracts\HasMingles;
 use Illuminate\Support\Collection;
 use Livewire\Component;
 
-class Counter extends Component implements HasMingles
+class Talk extends Component implements HasMingles
 {
     use InteractsWithMingles;
 
     public function component(): string
     {
-        return 'resources/js/Counter/index.js';
+        return 'resources/js/Talk/index.js';
     }
 
     public function mingleData(): array

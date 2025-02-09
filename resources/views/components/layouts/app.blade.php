@@ -14,7 +14,7 @@
     {{-- NAVBAR mobile only --}}
     <x-nav sticky class="lg:hidden">
         <x-slot:brand>
-            <x-app-brand />
+            <x-my-app-brand />
         </x-slot:brand>
         <x-slot:actions>
             <label for="main-drawer" class="lg:hidden me-3">
@@ -29,7 +29,7 @@
         <x-slot:sidebar drawer="main-drawer" collapsible class="bg-base-100 lg:bg-inherit">
 
             {{-- BRAND --}}
-            <x-app-brand class="p-5 pt-3" />
+            <x-my-app-brand class="p-5 pt-3" />
 
             {{-- MENU --}}
             <x-menu activate-by-route>
@@ -47,11 +47,11 @@
                     <x-menu-separator />
                 @endif
 
-                <x-menu-item title="Hello" icon="o-sparkles" link="/" />
-                <x-menu-sub title="Settings" icon="o-cog-6-tooth">
-                    <x-menu-item title="Wifi" icon="o-wifi" link="####" />
-                    <x-menu-item title="Archives" icon="o-archive-box" link="####" />
-                </x-menu-sub>
+                <x-menu-item title="Talk" icon="o-sparkles" link="/" />
+{{--                <x-menu-sub title="Settings" icon="o-cog-6-tooth">--}}
+{{--                    <x-menu-item title="Wifi" icon="o-wifi" link="####" />--}}
+{{--                    <x-menu-item title="Archives" icon="o-archive-box" link="####" />--}}
+{{--                </x-menu-sub>--}}
             </x-menu>
         </x-slot:sidebar>
 

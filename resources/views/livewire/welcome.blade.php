@@ -11,7 +11,7 @@
 
     <!-- TABLE  -->
     <x-card>
-        <livewire:counter />
+        <livewire:talk />
     </x-card>
 
     <!-- FILTER DRAWER -->
