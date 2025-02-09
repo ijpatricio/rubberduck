@@ -12,9 +12,9 @@ class UserSeeder extends Seeder
     {
         User::factory()
             ->create([
-                'email' => config('app.default_user.email'),
-                'password' => Hash::make(config('app.default_user.password')),
-                'name' => config('app.default_user.name'),
+                'name' => 'Test User',
+                'email' => 'test@example.com',
+                'password' => Hash::make('password'),
             ]);
     }
 }

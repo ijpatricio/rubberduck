@@ -3,8 +3,6 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Anthropic\Anthropic;
-use Illuminate\Support\Facades\Http;
 
 class ChatBot extends Component
 {
@@ -71,10 +69,6 @@ class ChatBot extends Component
                         if (isset($data['type']) && $data['type'] === 'content_block_delta') {
                             $newText = $data['delta']['text'] ?? '';
                             $fullResponse .= $newText;
-
-//                            ray($newText)->green();
-//                            ray($fullResponse)->red();
-//                            ray('---');
 
                             $this->streamedContent .= $newText;
 

@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+@plugin "daisyui" {
+    themes: night --default;
+}
+
+@source "../views";
+@source "../js";
