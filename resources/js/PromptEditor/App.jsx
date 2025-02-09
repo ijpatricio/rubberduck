@@ -63,7 +63,9 @@ const insertAlert = (editor) => ({
 })
 
 // Function which gets all users for the mentions menu.
-const getMentionMenuItems = (editor) => {
+const getMentionMenuItems = async (editor) => {
+
+    const wire = useContext(WireContext)
 
     const users = [
         'Steve', 'Bob', 'Joe', 'Mike', 'John', 'Alice', 'Eve', 'Mallory', 'Trudy', 'Carol', 'Dave', 'Frank', 'Grace', 'Heidi', 'Ivan', 'Judy', 'Mallory', 'Oscar', 'Peggy', 'Randy', 'Sybil', 'Trent', 'Victor', 'Walter', 'Xavier', 'Yvonne', 'Zelda'

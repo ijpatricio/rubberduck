@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\DTOs\FileInfo;
+use App\Helpers\Finder;
 use Ijpatricio\Mingle\Concerns\InteractsWithMingles;
 use Ijpatricio\Mingle\Contracts\HasMingles;
 use Illuminate\Support\Collection;
@@ -23,27 +24,36 @@ class PromptEditor extends Component implements HasMingles
     public function mingleData(): array
     {
         return [
-            'message' => 'Message in a bottle  PromptEditor 🍾',
+            //
         ];
     }
 
     #[Renderless]
-    public function findFile($query): Collection
+    public function findFile($query, $basePath): Collection
     {
-        return collect(File::allFiles(base_path()))
-            ->filter(fn(SplFileInfo $file) => str($file->getRealPath())
-                ->replace(base_path('/'), '')
-                ->contains($query))
-            ->map(function (SplFileInfo $file) {
+        ray($query, $basePath);
 
-                $pathInProject = str_replace(base_path('/'), '', $file->getRealPath());
+        return collect();
 
-                $contents = File::get($file->getRealPath());
+        $files = collect(
+            Finder::find(
+                base_path(str($relativePath)->start('/')),
+                [
+                    'node_modules',
+                    'vendor',
+                    '.git',
+                    '.idea',
+                    '.vscode',
+                    'public',
+                    'storage',
+                    'tests',
+                ]
+            )
+        );
 
-                return new FileInfo(
-                    $pathInProject,
-                    $contents,
-                );
+        return $files
+            ->map(function ($file) {
+                return str_replace(base_path('/'), '', $file->getRealPath());
             });
     }
 }

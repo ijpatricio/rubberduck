@@ -1,4 +1,4 @@
-import React, {useContext} from "react"
+import React from "react"
 import {createReactInlineContentSpec} from "@blocknote/react"
 
 // The Mention inline content.

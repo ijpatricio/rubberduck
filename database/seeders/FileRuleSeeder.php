@@ -1,5 +1,28 @@
+<?php
 
-@verbatim
+namespace Database\Seeders;
+
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\File;
+
+class FileRuleSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
+    {
+        if (File::exists($filePath = storage_path('app/rules/first-one.txt'))) {
+            return;
+        }
+
+        File::put($filePath, $this->content());
+    }
+
+    private function content():string
+    {
+        return <<<EOT
 You are an expert PHP developer with extensive experience in Laravel 11. Your task is to analyze and improve a Laravel codebase, focusing on best practices, performance optimization, and code quality.
 
 I will provide you with a .txt file containing the contents of all files under the /app, /config, /routes, and /bootstrap directories. The file structure is as follows:
@@ -44,4 +67,7 @@ Important guidelines:
 As a senior developer, I'm looking for high-level insights and meaningful optimizations. Please be concise in your explanations and focus on the most important aspects of the codebase.
 
 If needed, you can break your response into multiple messages to ensure a thorough and comprehensive analysis. Please begin your analysis once I provide the code file.
-@endverbatim
+
+EOT;
+    }
+}
