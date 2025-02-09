@@ -33,7 +33,8 @@ export default {
 
 <template>
     <div class="w-full flex justify-between gap-4">
-        <div class="border p-2 rounded-lg typography" v-html="markdown.render(source)" />
+        <div class="border p-6 rounded-lg typography" v-html="markdown.render(source)" />
+        <div class="border p-2 rounded-lg whitespace-pre-wrap" v-text="markdown.render(source)" />
         <div class="border p-2 rounded-lg whitespace-pre-wrap" v-text="source" />
     </div>
 </template>

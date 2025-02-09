@@ -106,13 +106,3 @@ export default {
     },
 }
 </script>
-
-<style>
-.response-container {
-    margin-top: 1rem;
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    min-height: 100px;
-}
-</style>

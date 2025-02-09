@@ -6,11 +6,6 @@
 
 @source "../views";
 @source "../js";
+@source "../css";
 
-@layer components {
-    .typography {
-        p {
-            @apply bg-red-400;
-        }
-    }
-}
+@import "./markdown.css";
