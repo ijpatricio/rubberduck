@@ -22,6 +22,9 @@ class ChatBot extends Component
     function ask()
     {
         try {
+            // Reset answer at the start
+            $this->answer = '';
+
             $client = new \GuzzleHttp\Client();
 
             $response = $client->post('https://api.anthropic.com/v1/messages', [
@@ -47,8 +50,6 @@ class ChatBot extends Component
             $buffer = '';
             $body = $response->getBody();
 
-            $keepText = '';
-
             while (!$body->eof()) {
                 $chunk = $body->read(1024);
                 $buffer .= $chunk;
@@ -68,25 +69,26 @@ class ChatBot extends Component
                         $data = json_decode($jsonData, true);
 
                         if (isset($data['type']) && $data['type'] === 'content_block_delta') {
+                            $newText = $data['delta']['text'] ?? '';
+
+                            // Update both the stream and the answer property
+                            $this->answer .= $newText;
                             $this->stream(
                                 to: 'answer',
-                                content: $data['delta']['text'] ?? ''
+                                content: $this->answer
                             );
-
-                            $keepText .= $data['delta']['text'] ?? '';
                         }
                     }
                 }
             }
 
         } catch (\Exception $e) {
+            $this->answer = "Error: " . $e->getMessage();
             $this->stream(
                 to: 'answer',
-                content: "Error: " . $e->getMessage()
+                content: $this->answer
             );
         }
-
-        ray($response, $response->getBody(), $keepText);
     }
 
     public function render()
@@ -109,8 +111,6 @@ class ChatBot extends Component
                         </hgroup>
                     </article>
                 @endif
-
-                <p wire:stream="answer">{{ $answer }}</p>
             </section>
 
             <form wire:submit="submitPrompt">
