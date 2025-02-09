@@ -50,7 +50,7 @@ export default {
         streamedResponse: '', // Add this to store the streaming response
     }),
     mounted() {
-        this.streamedResponse = localStorage.getItem('streamedResponse') || ''
+        // this.streamedResponse = localStorage.getItem('streamedResponse') || ''
     },
     methods: {
         saveResponse() {

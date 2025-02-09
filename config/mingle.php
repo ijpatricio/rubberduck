@@ -12,6 +12,6 @@ return [
      * If to enable the React preamble.
      *
      */
-    'react_preamble_enabled' => false,
+    'react_preamble_enabled' => true,
 
 ];

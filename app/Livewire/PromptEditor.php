@@ -4,22 +4,21 @@ namespace App\Livewire;
 
 use Ijpatricio\Mingle\Concerns\InteractsWithMingles;
 use Ijpatricio\Mingle\Contracts\HasMingles;
-use Illuminate\Support\Collection;
 use Livewire\Component;
 
-class SystemPromptEditor extends Component implements HasMingles
+class PromptEditor extends Component implements HasMingles
 {
     use InteractsWithMingles;
 
     public function component(): string
     {
-        return 'resources/js/SystemPromptEditor/index.js';
+        return 'resources/js/PromptEditor/index.js';
     }
 
     public function mingleData(): array
     {
         return [
-            'message' => 'Message in a bottle 🍾',
+            'message' => 'Message in a bottle  PromptEditor 🍾',
         ];
     }
 

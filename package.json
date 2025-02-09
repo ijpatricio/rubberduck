@@ -7,7 +7,11 @@
     },
     "dependencies": {
         "@anthropic-ai/sdk": "^0.36.3",
+        "@blocknote/core": "^0.23.2",
+        "@blocknote/mantine": "^0.23.2",
+        "@blocknote/react": "^0.23.2",
         "@tailwindcss/vite": "^4.0.5",
+        "@vitejs/plugin-react": "^4.3.4",
         "@vitejs/plugin-vue": "^5.2.1",
         "laravel-vite-plugin": "^1.0",
         "markdown-it": "^14.1.0",
@@ -18,6 +22,7 @@
         "markdown-it-sup": "^2.0.0",
         "markdown-it-task-lists": "^2.1.1",
         "markdown-it-toc-done-right": "^4.2.0",
+        "react": "^19.0.0",
         "tailwindcss": "^4.0.5",
         "vite": "^5.4",
         "vue": "^3.5.13"
