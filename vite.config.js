@@ -15,6 +15,8 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
+                'resources/js/PromptEditor/index.jsx',
+                'resources/js/Talk/index.jsx',
             ],
             refresh: true,
         }),

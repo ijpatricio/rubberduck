@@ -1,16 +1,5 @@
 <template>
     <div>
-        <div class="w-full flex justify-between gap-4">
-            <textarea
-                placeholder="System prompt"
-                class="textarea textarea-bordered textarea-md w-full"
-            ></textarea>
-            <textarea
-                placeholder="Ask a question"
-                class="textarea textarea-bordered textarea-md w-full"
-            ></textarea>
-        </div>
-
         <div class="mt-2 flex flex-col gap-2">
             <div class="mr-10">
                 Use cached response

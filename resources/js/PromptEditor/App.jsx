@@ -1,14 +1,16 @@
 import React from 'react'
 import { MantineProvider, Button } from '@mantine/core'
 import { FormattingToolbar } from '@blocknote/react'
+import { Mention } from './Mention'
 
 import {
     BlockNoteSchema,
     defaultBlockSpecs,
+    defaultInlineContentSpecs,
     filterSuggestionItems,
     insertOrUpdateBlock,
 } from "@blocknote/core"
-import "@blocknote/core/fonts/inter.css"
+
 import {
     SuggestionMenuController,
     getDefaultReactSlashMenuItems,
@@ -30,6 +32,12 @@ const schema = BlockNoteSchema.create({
         ...defaultBlockSpecs,
         // Adds the Alert block.
         alert: Alert,
+    },
+    inlineContentSpecs: {
+        // Adds all default inline content.
+        ...defaultInlineContentSpecs,
+        // Adds the mention tag.
+        mention: Mention,
     },
 })
 
@@ -54,63 +62,39 @@ const insertAlert = (editor) => ({
     icon: <RiAlertFill />,
 })
 
+// Function which gets all users for the mentions menu.
+const getMentionMenuItems = (editor) => {
+
+    const users = [
+        'Steve', 'Bob', 'Joe', 'Mike', 'John', 'Alice', 'Eve', 'Mallory', 'Trudy', 'Carol', 'Dave', 'Frank', 'Grace', 'Heidi', 'Ivan', 'Judy', 'Mallory', 'Oscar', 'Peggy', 'Randy', 'Sybil', 'Trent', 'Victor', 'Walter', 'Xavier', 'Yvonne', 'Zelda'
+    ]
+
+    const randomUsers = users
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 5)
+
+    return randomUsers.map((user) => ({
+        title: user,
+        onItemClick: () => {
+            editor.insertInlineContent([
+                {
+                    type: 'mention',
+                    props: {
+                        user,
+                    },
+                },
+                ' ', // add a space after the mention
+            ])
+        },
+    }))
+}
+
 
 export default function App(wire) {
     // Creates a new editor instance.
     const editor = useCreateBlockNote({
         schema,
         initialContent: [
-            {
-                "id": "8cb32792-ef54-47a2-b86d-697c2bd02e25",
-                "type": "paragraph",
-                "props": {
-                    "textColor": "default",
-                    "backgroundColor": "default",
-                    "textAlignment": "left"
-                },
-                "content": [
-                    {
-                        "type": "text",
-                        "text": "Welcome to this demo!",
-                        "styles": {}
-                    }
-                ],
-                "children": []
-            },
-            {
-                "id": "4532dfe9-5c50-4886-a9f8-8b57589d1501",
-                "type": "alert",
-                "props": {
-                    "textColor": "default",
-                    "textAlignment": "left",
-                    "type": "warning"
-                },
-                "content": [
-                    {
-                        "type": "text",
-                        "text": "This is an example alert",
-                        "styles": {}
-                    }
-                ],
-                "children": []
-            },
-            {
-                "id": "0581392c-3be9-44ea-9d6f-602203e6af63",
-                "type": "paragraph",
-                "props": {
-                    "textColor": "default",
-                    "backgroundColor": "default",
-                    "textAlignment": "left"
-                },
-                "content": [
-                    {
-                        "type": "text",
-                        "text": "Press the '/' key to open the Slash Menu and add another",
-                        "styles": {}
-                    }
-                ],
-                "children": []
-            },
             {
                 "id": "f0149aad-cbc5-41bf-9791-d8181a6de1c4",
                 "type": "paragraph",
@@ -124,6 +108,12 @@ export default function App(wire) {
             }
         ],
     })
+
+    const renderAsMarkdown = async () => {
+        console.log(
+            await editor.blocksToMarkdownLossy(editor.document)
+        )
+    }
 
     const renderOutputAsHTMLLossy = async () => {
         console.log(
@@ -148,8 +138,6 @@ export default function App(wire) {
         <>
             <BlockNoteView editor={editor} slashMenu={false} formattingToolbar={false}>
 
-                <FormattingToolbar />
-
                 {/* Replaces the default Slash Menu. */}
                 <SuggestionMenuController
                     triggerCharacter={"/"}
@@ -164,17 +152,27 @@ export default function App(wire) {
                         )
                     }
                 />
+
+                <SuggestionMenuController
+                    triggerCharacter={'@'}
+                    getItems={async (query) =>
+                        // Gets the mentions menu items
+                        filterSuggestionItems(getMentionMenuItems(editor), query)
+                    }
+                />
             </BlockNoteView>
+
+            <ul className={'mt-2 text-xs text-gray-500'}>
+                <li>Press the '/' key to open the Slash Menu.</li>
+                <li>Press the '#' key to refer a file.</li>
+            </ul>
+
             <div>
                 <MantineProvider>
-                    <Button variant="filled" onClick={renderOutputAsHTML} >See HTML</Button>
-                </MantineProvider>
-                <MantineProvider>
-                    <Button variant="filled" onClick={renderOutputAsHTMLLossy} >See HTML Lossy
-                    </Button>
-                </MantineProvider>
-                <MantineProvider>
-                    <Button variant="filled" onClick={renderOutputAsJSON} >See JSON</Button>
+                    <Button variant="filled" onClick={renderAsMarkdown} >See MD Lossy</Button>
+                    {/*<Button variant="filled" onClick={renderOutputAsHTML} >See HTML</Button>*/}
+                    {/*<Button variant="filled" onClick={renderOutputAsHTMLLossy} >See HTML Lossy</Button>*/}
+                    {/*<Button variant="filled" onClick={renderOutputAsJSON} >See JSON</Button>*/}
                 </MantineProvider>
             </div>
         </>
