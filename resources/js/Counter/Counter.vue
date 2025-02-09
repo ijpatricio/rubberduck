@@ -1,4 +1,6 @@
 <script setup>
+import { Button } from '@/Components/ui/button'
+
 const props = defineProps({
     wire: {},
     mingleData: {},
@@ -19,6 +21,6 @@ wire.doubleIt(2)
 
 <template>
     <div>
-         Build something great!
+         Build something great!   <Button>Click me</Button>
     </div>
 </template>
