@@ -118,12 +118,12 @@ class ChatBot extends Component
                 @if ($question)
                     <article>
                         <hgroup>
-                            <h3>User</h3>
+                            <h3 class="font-bold"> > User</h3>
                             <p>{{ $question }}</p>
                         </hgroup>
 
                         <hgroup>
-                            <h3>ChatBot</h3>
+                            <h3 class="font-bold"> > ChatBot</h3>
                             <div>
                                 <p wire:stream="streamedContent">{{ $streamedContent }}</p>
                             </div>
