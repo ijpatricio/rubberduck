@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "507a1b242dd24e001aaf3d1b293dd183",
+    "content-hash": "30f237f6b08f6605c2e6b6b7a2650b71",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -1959,6 +1959,83 @@
                 }
             ],
             "time": "2023-12-03T19:50:20+00:00"
+        },
+        {
+            "name": "ijpatricio/mingle",
+            "version": "v0.0.20",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ijpatricio/mingle.git",
+                "reference": "0216676db04e8bfd619852316f32772e8d77bc9e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ijpatricio/mingle/zipball/0216676db04e8bfd619852316f32772e8d77bc9e",
+                "reference": "0216676db04e8bfd619852316f32772e8d77bc9e",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^10.0||^11.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.16"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.14",
+                "laravel/sail": "^1.30",
+                "nunomaduro/collision": "^8.1.1||^7.10.0",
+                "orchestra/testbench": "^9.0.0||^8.22.0",
+                "pestphp/pest": "^2.34",
+                "pestphp/pest-plugin-arch": "^2.7",
+                "pestphp/pest-plugin-laravel": "^2.3",
+                "spatie/laravel-ray": "^1.35"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "Mingle": "Ijpatricio\\Mingle\\Facades\\Mingle"
+                    },
+                    "providers": [
+                        "Ijpatricio\\Mingle\\MingleServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Ijpatricio\\Mingle\\": "src/",
+                    "Ijpatricio\\Mingle\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joao Patricio",
+                    "email": "ijpatricio@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Use Vue and React in Laravel Livewire Applications.",
+            "homepage": "https://github.com/ijpatricio/mingle",
+            "keywords": [
+                "laravel",
+                "livewire",
+                "react",
+                "vue"
+            ],
+            "support": {
+                "issues": "https://github.com/ijpatricio/mingle/issues",
+                "source": "https://github.com/ijpatricio/mingle/tree/v0.0.20"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/ijpatricio",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-02-01T19:44:56+00:00"
         },
         {
             "name": "kirschbaum-development/eloquent-power-joins",
