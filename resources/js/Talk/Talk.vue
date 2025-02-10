@@ -1,11 +1,16 @@
 <template>
     <div>
-        <div class="mt-2 flex flex-col gap-2">
+        <div class="mt-12">
+            <button class="btn btn-primary btn-sm" @click="preparePrompts">
+                Prepare Prompts
+            </button>
+        </div>
+        <div class="mt-6 flex flex-col gap-2">
             <div class="mr-10">
                 Use cached response
                 <input v-model="useCache" type="checkbox" checked="checked" class="toggle toggle-sm"/>
             </div>
-            <div>
+            <div class="flex gap-4">
                 <button class="btn btn-primary btn-sm" @click="demo">
                     Ask AI (demo)
                 </button>
@@ -57,9 +62,9 @@ export default {
 
         window.Livewire.on('promptUpdated', ({promptType, document}) => {
             if (promptType === 'systemPrompt') {
-                this.promptStore.systemPrompt = document
+                this.promptStore.systemPromptDocument = document
             } else {
-                this.promptStore.newMessage = document
+                this.promptStore.newMessageDocument = document
             }
         })
     },
@@ -113,6 +118,13 @@ export default {
             } catch (error) {
                 console.error('Streaming error:', error)
             }
+        },
+        async preparePrompts() {
+            const payload = {
+                systemPrompt: this.promptStore.systemPrompt,
+                newMessage: this.promptStore.newMessage,
+            }
+
         },
     },
 }

@@ -3,9 +3,9 @@ import { defineStore } from 'pinia'
 export const usePromptStore = defineStore('prompt', {
 
     state: () => ({
-        count: 0,
-        systemPrompt: {},
-        newMessage: {},
+        systemPromptDocument: {},
+        newMessageDocument: {},
+
         example: {
             model: "claude-3-5-sonnet-20241022",
             max_tokens: 4096,
@@ -80,12 +80,10 @@ export const usePromptStore = defineStore('prompt', {
     }),
 
     getters: {
-        doubleCount: (state) => state.count * 2,
+        //
     },
 
     actions: {
-        increment() {
-            this.count++
-        },
+        //
     },
 })

@@ -31,4 +31,9 @@ class Talk extends Component implements HasMingles
             'model' => config('services.anthropic.model'),
         ];
     }
+
+    public function preparePrompts()
+    {
+
+    }
 }
