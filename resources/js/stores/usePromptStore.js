@@ -6,6 +6,9 @@ export const usePromptStore = defineStore('prompt', {
         systemPromptDocument: {},
         newMessageDocument: {},
 
+        systemPrompt: null,
+        messages: [],
+
         example: {
             model: "claude-3-5-sonnet-20241022",
             max_tokens: 4096,

@@ -26,10 +26,10 @@
         </div>
 
         <div>
-            <pre>{{ JSON.stringify(promptStore.systemPrompt) }}</pre>
+            <pre>{{ JSON.stringify(promptStore.systemPromptDocument) }}</pre>
         </div>
         <div>
-            <pre>{{ JSON.stringify(promptStore.newMessage) }}</pre>
+            <pre>{{ JSON.stringify(promptStore.newMessageDocument) }}</pre>
         </div>
     </div>
 </template>
