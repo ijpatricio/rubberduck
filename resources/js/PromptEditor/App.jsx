@@ -181,12 +181,6 @@ function Editor({initialContent}) {
                 />
             </BlockNoteView>
 
-            <ul className={'mt-2 text-xs text-gray-500'}>
-                <li>Press the '/' key to open the Slash Menu.</li>
-                <li>Press the '@' key to refer a File.</li>
-                <li>Press the '#' key to refer a Rule.</li>
-            </ul>
-
             <MantineProvider>
                 <Button variant="filled" onClick={renderAsMarkdown}>See MD Lossy</Button>
                 <Button variant="filled" onClick={renderOutputAsJSON}>See JSON</Button>

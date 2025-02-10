@@ -7,7 +7,7 @@
             </div>
             <div>
                 <button class="btn btn-primary btn-sm" @click="demo">
-                    Ask AI
+                    Ask AI (demo)
                 </button>
             </div>
         </div>
