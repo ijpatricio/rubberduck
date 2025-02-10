@@ -83,8 +83,8 @@ function Editor({initialContent}) {
                 items = await wire.call('findFiles', query, wire.get('basePath'))
 
                 items = Array.from(items).map((item) => ({
-                    title: item,
                     type: 'file',
+                    title: item,
                     value: item,
                 }))
                 break
@@ -151,7 +151,10 @@ function Editor({initialContent}) {
                 slashMenu={false}
                 formattingToolbar={false}
                 onChange={() => {
-                    window.Livewire.dispatch('promptUpdated', [...editor.document])
+                    wire.dispatch('promptUpdated', {
+                        promptType: wire.get('promptType'),
+                        document: [...editor.document],
+                    })
                 }}
             >
                 <SuggestionMenuController

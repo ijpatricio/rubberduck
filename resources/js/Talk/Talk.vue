@@ -21,25 +21,22 @@
         </div>
 
         <div>
-            <pre>{{ JSON.stringify(promptStore.prompt) }}</pre>
+            <pre>{{ JSON.stringify(promptStore.systemPrompt) }}</pre>
+        </div>
+        <div>
+            <pre>{{ JSON.stringify(promptStore.newMessage) }}</pre>
         </div>
     </div>
 </template>
 
-<script setup>
-import MarkdownRenderer from "./MarkdownRenderer.vue"
-import {usePromptStore} from "../stores/usePromptStore.js";
-const promptStore = usePromptStore()
-
-window.Livewire.on('promptUpdated', (prompt) => {
-    promptStore.prompt = prompt
-})
-</script>
-
 <script>
+import MarkdownRenderer from "./MarkdownRenderer.vue"
 import Anthropic from "@anthropic-ai/sdk"
-
+import {usePromptStore} from "../stores/usePromptStore.js";
 export default {
+    components: {
+        MarkdownRenderer,
+    },
     props: {
         wire: Object,
         mingleData: Object,
@@ -48,8 +45,23 @@ export default {
         useCache: true,
         streamedResponse: '', // Add this to store the streaming response
     }),
+    setup() {
+        const promptStore = usePromptStore()
+
+        return {
+            promptStore,
+        }
+    },
     mounted() {
         // this.streamedResponse = localStorage.getItem('streamedResponse') || ''
+
+        window.Livewire.on('promptUpdated', ({promptType, document}) => {
+            if (promptType === 'systemPrompt') {
+                this.promptStore.systemPrompt = document
+            } else {
+                this.promptStore.newMessage = document
+            }
+        })
     },
     methods: {
         saveResponse() {

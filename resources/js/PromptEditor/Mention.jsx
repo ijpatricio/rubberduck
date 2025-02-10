@@ -28,7 +28,7 @@ export const Mention = createReactInlineContentSpec(
                     props.inlineContent.props.type === "file" ? "bg-green-800" : "bg-blue-800"
                 ].join(' ')}
             >
-                    {props.inlineContent.props.type === "file" ? "@" : "#"}
+                    {props.inlineContent.props.type === "file" ? "@file:" : "#rule:"}
                     {props.inlineContent.props.title}
                 </span>
 

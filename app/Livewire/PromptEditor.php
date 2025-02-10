@@ -17,6 +17,8 @@ class PromptEditor extends Component implements HasMingles
 
     public string $basePath;
 
+    public string $promptType;
+
     public function component(): string
     {
         return 'resources/js/PromptEditor/index.js';

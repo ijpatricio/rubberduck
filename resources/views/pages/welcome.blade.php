@@ -12,7 +12,7 @@
 
     <div class="h-4"></div>
 
-    <livewire:prompt-editor />
+    <livewire:prompt-editor prompt-type="systemPrompt" />
 
     <div class="mt-16">
         <h1 class="text-3xl font-bold">Chat</h1>
@@ -26,7 +26,7 @@
 
     <div class="h-4"></div>
 
-    <livewire:prompt-editor />
+    <livewire:prompt-editor prompt-type="newMessage" />
 
     <livewire:talk />
 

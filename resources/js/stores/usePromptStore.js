@@ -4,7 +4,8 @@ export const usePromptStore = defineStore('prompt', {
 
     state: () => ({
         count: 0,
-        prompt: {},
+        systemPrompt: {},
+        newMessage: {},
         example: {
             model: "claude-3-5-sonnet-20241022",
             max_tokens: 4096,
