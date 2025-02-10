@@ -127,13 +127,28 @@ function Editor({initialContent}) {
         }))
     }
 
-    const onEditorChange = async () => {
+    const propagateContentToStore = async () => {
         const documentHTML = await editor.blocksToFullHTML(editor.document)
         if (wire.get('promptType') === 'system_prompt') {
             setSystemPrompt(documentHTML)
         } else {
             setNewMessage(documentHTML)
         }
+    }
+
+    // After loading the Initial content, propagate it to the store
+    useEffect(() => {
+        if (editor) {
+            // Wrap in Promise to defer execution
+            Promise.resolve().then(() => {
+                propagateContentToStore()
+            })
+        }
+    }, [editor])
+
+    // When the editor content changes, propagate it to the store
+    const onEditorChange = async () => {
+        await propagateContentToStore()
     }
 
     // Renders the editor instance.
