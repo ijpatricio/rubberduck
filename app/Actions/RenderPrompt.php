@@ -2,37 +2,17 @@
 
 namespace App\Actions;
 
-use App\TipTap\CustomEditor;
-use App\TipTap\MentionNode;
-use Tiptap\Extensions\StarterKit;
+use Stevebauman\Hypertext\Transformer;
 
 class RenderPrompt
 {
-    protected $document;
-
-    public $schema;
-
-    public $configuration = [
-        'content' => null,
-        'extensions' => [],
-    ];
-
-    public function __invoke(array $blockNoteDocument)
+    public function __invoke(string $blockNoteHTML)
     {
-        $tiptapDocument = [
-            'type' => 'doc',
-            'content' => $blockNoteDocument,
-        ];
 
-        $editor = new CustomEditor([
-            'extensions' => [
-                new StarterKit,
-                new MentionNode,
-            ],
-        ]);
+        $converter = new BlockToMarkdownConverter();
+        $markdown = $converter->convert($blockNoteHTML);
 
-        ray(
-            $editor->setContent($tiptapDocument)->getText(),
-        )->expandAll();
+        dd($blockNoteHTML, $markdown);
+
     }
 }

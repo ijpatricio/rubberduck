@@ -183,14 +183,14 @@ function Editor({initialContent}) {
                 />
             </BlockNoteView>
 
-            {/*<MantineProvider>*/}
-                {/*<Button variant="filled" onClick={() => console.log(editor.document)}>*/}
-                {/*    See JSON*/}
-                {/*</Button>*/}
-                {/*<Button variant="filled" onClick={async () => console.log(await editor.blocksToFullHTML(editor.document))}>*/}
-                {/*    See HTML*/}
-                {/*</Button>*/}
-            {/*</MantineProvider>*/}
+            <MantineProvider>
+                <Button variant="filled" onClick={() => console.log(editor.document)}>
+                    See JSON
+                </Button>
+                <Button variant="filled" onClick={async () => console.log(await editor.blocksToFullHTML(editor.document))}>
+                    See HTML
+                </Button>
+            </MantineProvider>
         </div>
     )
 }

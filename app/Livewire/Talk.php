@@ -58,8 +58,6 @@ class Talk extends Component implements HasMingles
 
     public function renderPrompt($blockNoteHTML, RenderPrompt $renderPrompt)
     {
-        dd($blockNoteHTML);
-
         return $renderPrompt($blockNoteHTML);
     }
 }
