@@ -16,7 +16,7 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/PromptEditor/index.jsx',
-                'resources/js/Talk/index.jsx',
+                'resources/js/Talk/index.js',
             ],
             refresh: true,
         }),

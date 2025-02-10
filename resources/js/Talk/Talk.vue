@@ -23,12 +23,13 @@
 </template>
 
 <script setup>
+import Anthropic from "@anthropic-ai/sdk"
 import MarkdownRenderer from "./MarkdownRenderer.vue"
+import {usePromptStore} from "../stores/usePromptStore.js";
+const promptStore = usePromptStore()
 </script>
 
 <script>
-import Anthropic from "@anthropic-ai/sdk"
-
 export default {
     props: {
         wire: Object,
