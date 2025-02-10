@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
 // Create the store
-const useStore = create((set) => ({
+const usePromptEditorsStore = create((set) => ({
 
     systemPrompt: null,
 
@@ -16,14 +16,14 @@ const useStore = create((set) => ({
 // Export the store and the store accessor
 export const storeAccessor = {
     get state() {
-        return useStore.getState()
+        return usePromptEditorsStore.getState()
     },
     setSystemPrompt(newData) {
-        useStore.getState().setSystemPrompt(newData)
+        usePromptEditorsStore.getState().setSystemPrompt(newData)
     },
     setNewMessage(newData) {
-        useStore.getState().setNewMessage(newData)
+        usePromptEditorsStore.getState().setNewMessage(newData)
     },
 }
 
-export default useStore
+export default usePromptEditorsStore

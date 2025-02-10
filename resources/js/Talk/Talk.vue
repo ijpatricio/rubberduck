@@ -41,8 +41,8 @@
 <script>
 import MarkdownRenderer from "./MarkdownRenderer.vue"
 import Anthropic from "@anthropic-ai/sdk"
-import {usePromptStore} from "../stores/usePromptStore.js"
-import useStore, {storeAccessor} from './../stores/sharedStore.js'
+import {useChatStore} from "../stores/useChatStore.js"
+import usePromptEditorsStore, {storeAccessor} from '../stores/promptEditorsStore.js'
 import {ref, onUnmounted} from "vue"
 
 export default {
@@ -58,13 +58,13 @@ export default {
         streamedResponse: '',
     }),
     setup() {
-        const promptStore = usePromptStore()
+        const promptStore = useChatStore()
 
         const systemPrompt = ref(storeAccessor.state.systemPrompt)
         const newMessage = ref(storeAccessor.state.newMessage)
 
         // Create subscription to sync state changes
-        const unsubscribe = useStore.subscribe((state) => {
+        const unsubscribe = usePromptEditorsStore.subscribe((state) => {
             systemPrompt.value = state.systemPrompt
             newMessage.value = state.newMessage
         })
@@ -82,14 +82,6 @@ export default {
     },
     mounted() {
         // this.streamedResponse = localStorage.getItem('streamedResponse') || ''
-
-        window.Livewire.on('promptUpdated', ({promptType, document}) => {
-            if (promptType === 'systemPrompt') {
-                this.promptStore.systemPromptDocument = document
-            } else {
-                this.promptStore.newMessageDocument = document
-            }
-        })
     },
     methods: {
         saveResponse() {
@@ -101,6 +93,7 @@ export default {
                 this.streamedResponse = localStorage.getItem('streamedResponse')
                 return
             }
+
             // Reset the streamed response
             this.streamedResponse = ''
 
@@ -144,11 +137,16 @@ export default {
         },
         async preparePrompts() {
 
-            console.log('Prompt store:', storeAccessor.state.systemPrompt)
-            console.log('Prompt store:', storeAccessor.state.newMessage)
+            const systemPromptHTML = storeAccessor.state.systemPrompt
+            const newMessageHTML = storeAccessor.state.newMessage
 
-            return
-            this.wire.call('renderPrompt', this.promptStore.systemPromptDocument)
+            const systemPromptAsText = this.wire.call('renderPrompt', systemPromptHTML)
+                .then((response) => {
+                    this.promptStore.systemPromptDocument = response
+                })
+
+            return;
+            const newMessageAsText = this.wire.call('renderPrompt', newMessageHTML)
 
         },
     },
