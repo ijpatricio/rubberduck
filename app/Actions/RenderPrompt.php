@@ -2,13 +2,9 @@
 
 namespace App\Actions;
 
-use Illuminate\Support\Collection;
-use Exception;
-use Tiptap\Core\DOMParser;
-use Tiptap\Core\DOMSerializer;
-use Tiptap\Core\JSONSerializer;
-use Tiptap\Core\Schema;
-use Tiptap\Core\TextSerializer;
+use App\TipTap\CustomEditor;
+use App\TipTap\CustomTextSerializer;
+use App\TipTap\MentionNode;
 use Tiptap\Editor;
 use Tiptap\Extensions\StarterKit;
 
@@ -27,60 +23,23 @@ class RenderPrompt
     {
         ray()->clearAll();
 
-        // Transform BlockNote format to Tiptap format
         $tiptapDocument = [
             'type' => 'doc',
-            'content' => $this->transformBlockNoteToTiptap($blockNoteDocument)
+            'content' => $blockNoteDocument,
         ];
 
-        $editor = new Editor();
+        $editor = new CustomEditor([
+            'extensions' => [
+                new StarterKit,
+                new MentionNode,
+            ],
+        ]);
+
 
         ray(
-            $blockNoteDocument,
-            $editor,
             $editor->setContent($tiptapDocument)->getText(),
+//            $blockNoteDocument,
+//            $editor,
         )->expandAll();
-
-    }
-
-    protected function transformBlockNoteToTiptap(array $blocks): array
-    {
-        return array_map(function ($block) {
-            $tiptapNode = [
-                'type' => $this->mapBlockType($block['type']),
-            ];
-
-            if (!empty($block['content'])) {
-                $tiptapNode['content'] = array_map(function ($content) {
-                    if ($content['type'] === 'text') {
-                        return [
-                            'type' => 'text',
-                            'text' => $content['text']
-                        ];
-                    } elseif ($content['type'] === 'mention') {
-                        return [
-                            'type' => 'text',
-                            'text' => $content['props']['title']
-                        ];
-                    }
-                    return null;
-                }, $block['content']);
-
-                // Filter out null values
-                $tiptapNode['content'] = array_filter($tiptapNode['content']);
-            }
-
-            return $tiptapNode;
-        }, $blocks);
-    }
-
-    protected function mapBlockType(string $blockNoteType): string
-    {
-        $typeMap = [
-            'paragraph' => 'paragraph',
-            // Add more mappings as needed
-        ];
-
-        return $typeMap[$blockNoteType] ?? 'paragraph';
     }
 }
