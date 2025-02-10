@@ -11,6 +11,7 @@ export const useChatStore = defineStore('chat', {
             temperature: null,
             system: null,
             messages: [],
+            stream: true,
         },
 
 

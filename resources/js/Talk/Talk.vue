@@ -15,31 +15,13 @@
         <div class="flex justify-end">
             <textarea v-for="message in chatStore.payload.messages" class="p-4" readonly disabled cols="80" rows="20">{{ message }}</textarea>
         </div>
-
-        <!--  -->
-
-
-        <div v-if="false" class="mt-6 flex flex-col gap-2">
-            <div class="mr-10">
-                Use cached response
-                <input v-model="useCache" type="checkbox" checked="checked" class="toggle toggle-sm"/>
-            </div>
-            <div class="flex gap-4">
-                <button @click="saveResponse" class="btn btn-primary btn-outline btn-sm">
-                    Cache current response
-                </button>
-                <button class="btn btn-primary btn-sm" @click="demo">
-                    Ask AI (demo)
-                </button>
-            </div>
-        </div>
-
-
         <div class="mt-2 flex justify-end">
             <button class="btn btn-primary btn-sm" @click="sendPayload">
                 Send message
             </button>
         </div>
+
+        <!-- Reply -->
         <MarkdownRenderer class="mt-10" :source="streamedResponse"/>
     </div>
 </template>
@@ -60,8 +42,8 @@ export default {
         mingleData: Object,
     },
     data: () => ({
-        useCache: true,
         streamedResponse: '',
+        client: null,
     }),
     setup() {
         const chatStore = useChatStore()
@@ -76,9 +58,7 @@ export default {
         })
 
         // Clean up subscription
-        onUnmounted(() => {
-            unsubscribe()
-        })
+        onUnmounted(() => unsubscribe())
 
         return {
             chatStore,
@@ -87,48 +67,25 @@ export default {
         }
     },
     mounted() {
-        // this.streamedResponse = localStorage.getItem('streamedResponse') || ''
+        this.prepareClient()
     },
     methods: {
-        saveResponse() {
-            localStorage.setItem('streamedResponse', this.streamedResponse)
-        },
-        async demo() {
-
-            if (this.useCache) {
-                this.streamedResponse = localStorage.getItem('streamedResponse')
-                return
-            }
-
-            // Reset the streamed response
-            this.streamedResponse = ''
-
-            const anthropic = new Anthropic({
+        prepareClient() {
+            this.client = new Anthropic({
                 apiKey: this.mingleData['api_key'],
                 dangerouslyAllowBrowser: true,
             })
+            this.chatStore.payload.model = this.mingleData.model
+            this.chatStore.payload.max_tokens = 4096
+            this.chatStore.payload.temperature = 0
+        },
+        async sendPayload() {
+
+            this.streamedResponse = ''
+
 
             // Create a streaming message
-            const stream = await anthropic.messages.create({
-                model: this.mingleData.model,
-                max_tokens: 4096,
-                temperature: 0,
-                system: "Act as a successful developer that has over 20 years of experience, at designing web applications, using all CMS in the world, and a lot of publishing experience across many generalist and niche topics.",
-                messages: [
-                    {
-                        "role": "user",
-                        "content": [
-                            {
-                                "type": "text",
-                                "text": "Make a list of the .NET blazor stack components. Show some code examples."
-                            }
-                        ]
-                    }
-                ],
-
-                // Enable streaming
-                stream: true,
-            })
+            const stream = await this.client.messages.create({...this.chatStore.payload})
 
             // Process the stream
             try {
@@ -157,12 +114,20 @@ export default {
 
                 this.chatStore.payload.system = systemPromptAsText
 
-                this.chatStore.payload.messages.push(newMessageAsText)
+                // For now, just ready to send first message. There's a lot o business logic to be added here
+                this.chatStore.payload.messages = []
+
+                this.chatStore.payload.messages.push({
+                    role: 'user',
+                    content: [
+                        {
+                            type: 'text',
+                            text: newMessageAsText,
+                        }
+                    ]
+                })
 
             })
-        },
-        sendPayload() {
-            alert('Not implemented')
         },
     },
 }
