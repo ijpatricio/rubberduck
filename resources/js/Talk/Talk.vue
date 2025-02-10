@@ -31,6 +31,10 @@
         <div>
             <pre>{{ JSON.stringify(promptStore.newMessageDocument) }}</pre>
         </div>
+        <div>
+            <pre>{{ JSON.stringify(systemPrompt) }}</pre>
+            <pre>{{ JSON.stringify(newMessage) }}</pre>
+        </div>
     </div>
 </template>
 
@@ -38,6 +42,9 @@
 import MarkdownRenderer from "./MarkdownRenderer.vue"
 import Anthropic from "@anthropic-ai/sdk"
 import {usePromptStore} from "../stores/usePromptStore.js"
+import useStore, {storeAccessor} from './../stores/sharedStore.js'
+import {ref, onUnmounted} from "vue"
+
 export default {
     components: {
         MarkdownRenderer,
@@ -48,13 +55,29 @@ export default {
     },
     data: () => ({
         useCache: true,
-        streamedResponse: '', // Add this to store the streaming response
+        streamedResponse: '',
     }),
     setup() {
         const promptStore = usePromptStore()
 
+        const systemPrompt = ref(storeAccessor.state.systemPrompt)
+        const newMessage = ref(storeAccessor.state.newMessage)
+
+        // Create subscription to sync state changes
+        const unsubscribe = useStore.subscribe((state) => {
+            systemPrompt.value = state.systemPrompt
+            newMessage.value = state.newMessage
+        })
+
+        // Clean up subscription
+        onUnmounted(() => {
+            unsubscribe()
+        })
+
         return {
             promptStore,
+            systemPrompt,
+            newMessage,
         }
     },
     mounted() {
@@ -120,6 +143,11 @@ export default {
             }
         },
         async preparePrompts() {
+
+            console.log('Prompt store:', storeAccessor.state.systemPrompt)
+            console.log('Prompt store:', storeAccessor.state.newMessage)
+
+            return
             this.wire.call('renderPrompt', this.promptStore.systemPromptDocument)
 
         },

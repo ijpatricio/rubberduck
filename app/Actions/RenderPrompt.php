@@ -19,8 +19,6 @@ class RenderPrompt
 
     public function __invoke(array $blockNoteDocument)
     {
-        ray()->clearAll();
-
         $tiptapDocument = [
             'type' => 'doc',
             'content' => $blockNoteDocument,
@@ -33,11 +31,8 @@ class RenderPrompt
             ],
         ]);
 
-
         ray(
             $editor->setContent($tiptapDocument)->getText(),
-//            $blockNoteDocument,
-//            $editor,
         )->expandAll();
     }
 }

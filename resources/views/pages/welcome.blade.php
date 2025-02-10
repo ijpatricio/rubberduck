@@ -1,3 +1,5 @@
+@use(\App\Enums\PromptEditorType)
+
 <div class="m-10">
     <div>
         <h1 class="text-3xl font-bold">Project</h1>
@@ -26,7 +28,7 @@
 
     <div class="h-4"></div>
 
-    <livewire:prompt-editor prompt-type="systemPrompt"/>
+    <livewire:prompt-editor prompt-type="{{ PromptEditorType::SYSTEM_PROMPT->value }}"/>
 
     <div class="mt-16">
         <h1 class="text-xl font-bold">Send a message</h1>
@@ -41,7 +43,7 @@
 
     <div class="h-4"></div>
 
-    <livewire:prompt-editor prompt-type="newMessage"/>
+    <livewire:prompt-editor prompt-type="{{ PromptEditorType::NEM_MESSAGE->value }}"/>
 
     <livewire:talk />
 
