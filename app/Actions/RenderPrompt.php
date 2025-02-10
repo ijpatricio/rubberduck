@@ -3,9 +3,7 @@
 namespace App\Actions;
 
 use App\TipTap\CustomEditor;
-use App\TipTap\CustomTextSerializer;
 use App\TipTap\MentionNode;
-use Tiptap\Editor;
 use Tiptap\Extensions\StarterKit;
 
 class RenderPrompt

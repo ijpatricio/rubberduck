@@ -2,8 +2,10 @@
 
 namespace App\View\Components\Tags;
 
+use App\RubberDuck;
 use Closure;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Str;
 use Illuminate\View\Component;
 
 class FileMention extends Component
@@ -18,7 +20,15 @@ class FileMention extends Component
         public string $value,
     )
     {
-        //
+        $projectBasePath = app()->make(RubberDuck::PROJECT_PATH);
+
+        $path = $projectBasePath . Str::start($this->value, '/');
+
+        if(\File::exists($this->value)) {
+            throw new \Exception("File [{$path}] not found");
+        }
+
+        $this->contents = \File::get($path);
     }
 
     /**
@@ -26,6 +36,9 @@ class FileMention extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.tags.file-mention');
+        return view('components.tags.file-mention', [
+            'contents' => $this->contents,
+            'path' => $this->value,
+        ]);
     }
 }
