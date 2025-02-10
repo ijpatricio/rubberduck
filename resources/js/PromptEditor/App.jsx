@@ -71,7 +71,7 @@ function Editor({initialContent}) {
     const editor = useCreateBlockNote({
         schema,
         initialContent,
-        sideMenuDetection: "editor"
+        sideMenuDetection: "editor",
     })
 
     const getMentionMenuItems = async (editor, query, type) => {
@@ -146,8 +146,14 @@ function Editor({initialContent}) {
     // Renders the editor instance.
     return (
         <div className={'w-full'}>
-            <BlockNoteView editor={editor} slashMenu={false} formattingToolbar={false}>
-
+            <BlockNoteView
+                editor={editor}
+                slashMenu={false}
+                formattingToolbar={false}
+                onChange={() => {
+                    window.Livewire.dispatch('promptUpdated', [...editor.document])
+                }}
+            >
                 <SuggestionMenuController
                     triggerCharacter={"/"}
                     getItems={async (query) =>

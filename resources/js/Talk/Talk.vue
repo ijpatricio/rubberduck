@@ -19,17 +19,26 @@
                 Cache current response
             </button>
         </div>
+
+        <div>
+            <pre>{{ JSON.stringify(promptStore.prompt) }}</pre>
+        </div>
     </div>
 </template>
 
 <script setup>
-import Anthropic from "@anthropic-ai/sdk"
 import MarkdownRenderer from "./MarkdownRenderer.vue"
 import {usePromptStore} from "../stores/usePromptStore.js";
 const promptStore = usePromptStore()
+
+window.Livewire.on('promptUpdated', (prompt) => {
+    promptStore.prompt = prompt
+})
 </script>
 
 <script>
+import Anthropic from "@anthropic-ai/sdk"
+
 export default {
     props: {
         wire: Object,
