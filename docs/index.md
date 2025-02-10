@@ -8,8 +8,8 @@
 - No multiple chats at this point.
 - It has a system prompt.
 - The prompt have tags.
-  - Rule tags are like `#foo.txt`
-  - File tags are like `@resources/views/xpto.blade.php`
+  - Rule tags are like `#rule:foo.txt`
+  - File tags are like `@file:resources/views/xpto.blade.php`
   - We can eval/render prompts with tags, thus getting the final/result prompt.
   - The render method has access to more schema, not only what we see in the tags.
 - We can add Tags.
@@ -23,11 +23,11 @@
 - We can now have these Prompts in the UI. We also get complete JSON (editor data).
     ```
     --- system
-    @xpto.text
+    #rule:xpto.txt
     --- user
     In these files:
-    @resources/views/xpto.blade.php
-    @resources/views/foobar.blade.php
+    @file:resources/views/xpto.blade.php
+    @file:resources/views/foobar.blade.php
     
     help me to get livewireid
     ```
