@@ -2,11 +2,12 @@
 
 namespace App\Livewire;
 
-use App\Actions\RenderPrompt;
+use App\Actions\BlockNoteHTMLToMarkdownConverter;
 use App\RubberDuck;
 use Ijpatricio\Mingle\Concerns\InteractsWithMingles;
 use Ijpatricio\Mingle\Contracts\HasMingles;
 use Livewire\Attributes\Lazy;
+use Livewire\Attributes\Renderless;
 use Livewire\Component;
 
 #[Lazy]
@@ -56,8 +57,9 @@ class Talk extends Component implements HasMingles
         ];
     }
 
-    public function renderPrompt($blockNoteHTML, RenderPrompt $renderPrompt)
+    #[Renderless]
+    public function renderPrompt(string $blockNoteHTML, BlockNoteHTMLToMarkdownConverter $converter)
     {
-        return $renderPrompt($blockNoteHTML);
+        return $converter($blockNoteHTML);
     }
 }

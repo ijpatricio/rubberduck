@@ -12,7 +12,7 @@ test('Render BLock Note Document', function () {
 
     app()->bind(RubberDuck::PROJECT_PATH, fn() => $basePath);
 
-    $action = new \App\Actions\RenderPrompt;
+    $action = new \App\Actions\BlockNoteHTMLToMarkdownConverter;
 
     $result = $action($blockNoteHTML);
 

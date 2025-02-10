@@ -5,36 +5,42 @@
                 Prepare Prompts
             </button>
         </div>
-        <div class="mt-6 flex flex-col gap-2">
+
+        <!-- Prompt text previews -->
+        <div class="mt-8">
+            <div>System Prompt:</div>
+            <textarea class="p-4" readonly disabled cols="80" rows="20">{{ chatStore.payload.system }}</textarea>
+        </div>
+        <div class="flex justify-center my-6">Messages</div>
+        <div class="flex justify-end">
+            <textarea v-for="message in chatStore.payload.messages" class="p-4" readonly disabled cols="80" rows="20">{{ message }}</textarea>
+        </div>
+
+        <!--  -->
+
+
+        <div v-if="false" class="mt-6 flex flex-col gap-2">
             <div class="mr-10">
                 Use cached response
                 <input v-model="useCache" type="checkbox" checked="checked" class="toggle toggle-sm"/>
             </div>
             <div class="flex gap-4">
+                <button @click="saveResponse" class="btn btn-primary btn-outline btn-sm">
+                    Cache current response
+                </button>
                 <button class="btn btn-primary btn-sm" @click="demo">
                     Ask AI (demo)
                 </button>
             </div>
         </div>
 
-        <MarkdownRenderer class="mt-10" :source="streamedResponse"/>
 
-        <div class="mt-4 flex items-center gap-2">
-            <button @click="saveResponse" class="btn btn-primary btn-outline btn-sm">
-                Cache current response
+        <div class="mt-2 flex justify-end">
+            <button class="btn btn-primary btn-sm" @click="sendPayload">
+                Send message
             </button>
         </div>
-
-        <div>
-            <pre>{{ JSON.stringify(promptStore.systemPromptDocument) }}</pre>
-        </div>
-        <div>
-            <pre>{{ JSON.stringify(promptStore.newMessageDocument) }}</pre>
-        </div>
-        <div>
-            <pre>{{ JSON.stringify(systemPrompt) }}</pre>
-            <pre>{{ JSON.stringify(newMessage) }}</pre>
-        </div>
+        <MarkdownRenderer class="mt-10" :source="streamedResponse"/>
     </div>
 </template>
 
@@ -58,15 +64,15 @@ export default {
         streamedResponse: '',
     }),
     setup() {
-        const promptStore = useChatStore()
+        const chatStore = useChatStore()
 
-        const systemPrompt = ref(storeAccessor.state.systemPrompt)
-        const newMessage = ref(storeAccessor.state.newMessage)
+        const systemPromptEditorHTML = ref(storeAccessor.state.systemPrompt)
+        const newMessageEditorHTML = ref(storeAccessor.state.newMessage)
 
         // Create subscription to sync state changes
         const unsubscribe = usePromptEditorsStore.subscribe((state) => {
-            systemPrompt.value = state.systemPrompt
-            newMessage.value = state.newMessage
+            systemPromptEditorHTML.value = state.systemPrompt
+            newMessageEditorHTML.value = state.newMessage
         })
 
         // Clean up subscription
@@ -75,9 +81,9 @@ export default {
         })
 
         return {
-            promptStore,
-            systemPrompt,
-            newMessage,
+            chatStore,
+            systemPromptEditorHTML,
+            newMessageEditorHTML,
         }
     },
     mounted() {
@@ -138,16 +144,25 @@ export default {
         async preparePrompts() {
 
             const systemPromptHTML = storeAccessor.state.systemPrompt
+
             const newMessageHTML = storeAccessor.state.newMessage
 
-            const systemPromptAsText = this.wire.call('renderPrompt', systemPromptHTML)
-                .then((response) => {
-                    this.promptStore.systemPromptDocument = response
-                })
+            Promise.all([
 
-            return;
-            const newMessageAsText = this.wire.call('renderPrompt', newMessageHTML)
+                this.wire.call('renderPrompt', systemPromptHTML),
 
+                this.wire.call('renderPrompt', newMessageHTML),
+
+            ]).then(([systemPromptAsText, newMessageAsText]) => {
+
+                this.chatStore.payload.system = systemPromptAsText
+
+                this.chatStore.payload.messages.push(newMessageAsText)
+
+            })
+        },
+        sendPayload() {
+            alert('Not implemented')
         },
     },
 }

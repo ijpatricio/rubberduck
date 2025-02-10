@@ -1,12 +1,19 @@
 import { defineStore } from 'pinia'
 
-export const useChatStore = defineStore('prompt', {
+export const useChatStore = defineStore('chat', {
 
     state: () => ({
 
-        systemPrompt: null,
+        // This is the payload that we setup and increment over time
+        payload: {
+            model: null,
+            max_tokens: null,
+            temperature: null,
+            system: null,
+            messages: [],
+        },
 
-        messages: [],
+
 
         example: {
             model: "claude-3-5-sonnet-20241022",

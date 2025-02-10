@@ -2,18 +2,20 @@
 
 namespace App\Actions;
 
+use App\View\Components\Tags\FileMention;
+use App\View\Components\Tags\RuleMention;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
 
-class BlockToMarkdownConverter
+class BlockNoteHTMLToMarkdownConverter
 {
-    private DOMDocument $dom;
-    private DOMXPath $xpath;
-    private bool $inList = false;
-    private string $currentListType = '';
+    protected DOMDocument $dom;
+    protected DOMXPath $xpath;
+    protected bool $inList = false;
+    protected string $currentListType = '';
 
-    public function convert(string $html): string
+    public function __invoke(string $html): string
     {
         $this->dom = new DOMDocument();
         $this->dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
@@ -22,7 +24,7 @@ class BlockToMarkdownConverter
         return $this->processBlockGroup();
     }
 
-    private function processBlockGroup(): string
+    protected function processBlockGroup(): string
     {
         $markdown = '';
         $blocks = $this->xpath->query("//div[contains(@class, 'bn-block-outer')]");
@@ -43,7 +45,7 @@ class BlockToMarkdownConverter
         return trim($markdown);
     }
 
-    private function processBlock(DOMElement $block): string
+    protected function processBlock(DOMElement $block): string
     {
         $content = $this->xpath->query(".//div[contains(@class, 'bn-block-content')]", $block)->item(0);
 
@@ -62,7 +64,7 @@ class BlockToMarkdownConverter
         };
     }
 
-    private function processHeading(DOMElement $content): string
+    protected function processHeading(DOMElement $content): string
     {
         $heading = $this->xpath->query(".//h1|.//h2|.//h3|.//h4|.//h5|.//h6", $content)->item(0);
         if (!$heading) {
@@ -75,7 +77,7 @@ class BlockToMarkdownConverter
         return str_repeat('#', $level) . ' ' . $text;
     }
 
-    private function processBulletListItem(DOMElement $content): string
+    protected function processBulletListItem(DOMElement $content): string
     {
         $this->inList = true;
         $this->currentListType = 'bullet';
@@ -83,7 +85,7 @@ class BlockToMarkdownConverter
         return "- " . $text;
     }
 
-    private function processNumberListItem(DOMElement $content): string
+    protected function processNumberListItem(DOMElement $content): string
     {
         $this->inList = true;
         $this->currentListType = 'number';
@@ -91,7 +93,7 @@ class BlockToMarkdownConverter
         return "1. " . $text; // Markdown will handle the numbering automatically
     }
 
-    private function processParagraph(DOMElement $content): string
+    protected function processParagraph(DOMElement $content): string
     {
         $paragraph = $this->xpath->query(".//p[contains(@class, 'bn-inline-content')]", $content)->item(0);
 
@@ -102,7 +104,7 @@ class BlockToMarkdownConverter
         return $this->processParagraphContent($paragraph);
     }
 
-    private function processParagraphContent(DOMElement $paragraph): string
+    protected function processParagraphContent(DOMElement $paragraph): string
     {
         $spans = $this->xpath->query(".//span", $paragraph);
 
@@ -126,16 +128,29 @@ class BlockToMarkdownConverter
         return $markdown;
     }
 
-    private function processMention(DOMElement $span): string
+    protected function processMention(DOMElement $span): string
     {
         $type = $span->getAttribute('data-type');
         $title = $span->getAttribute('data-title');
         $value = $span->getAttribute('data-value');
 
         return match ($type) {
-            'rule' => "!rule[{$title}]({$value})",
-            'file' => "!file[{$title}]({$value})",
+            'rule' => $this->renderWith(RuleMention::class, [
+                'title' => $title,
+                'value' => $value,
+            ]),
+            'file' => $this->renderWith(FileMention::class, [
+                'title' => $title,
+                'value' => $value,
+            ]),
             default => $span->textContent,
         };
+    }
+
+    protected function renderWith(string $class, array $props)
+    {
+        $component = new $class(...$props);
+
+        return $component->render()->render();
     }
 }
