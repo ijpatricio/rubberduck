@@ -33,7 +33,7 @@ class PromptEditor extends Component implements HasMingles
     public function placeholder()
     {
         return <<<'HTML'
-        <div class="skeleton h-26 w-full"></div>
+        <div class="skeleton h-46 w-full"></div>
         HTML;
     }
 
