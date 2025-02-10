@@ -35,8 +35,12 @@
 - We want to click "Send" and get a response.
   - We need to eval the TAGS, replacing them with their respective "render".
   - We need an Action to get the Text/JSON, and evaluate the Prompts.
-- We now have the Final prompt ready.
-- Create Payload, persist in Store, ask confirm?
+  - We now have the Final prompt ready.
+  - Create Payload, persist in Store, ask confirm?
+============> This is the current status:
+======> TipTap PHP converter composer added. Pinia Store has the updated EditorDocuments.
+======> We now need to click "Prepare prompts" and get the final prompt, to send as a 1st message.
+  
 - We send to ClaudeAPI, get a response, persist (increment/replace), and show it.
 - We also need a clear button.
   
