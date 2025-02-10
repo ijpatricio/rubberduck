@@ -2,6 +2,9 @@
 
 namespace App\TipTap;
 
+use App\View\Components\Tags\FileMention;
+use App\View\Components\Tags\RuleMention;
+
 class CustomTextSerializer
 {
     protected $document;
@@ -63,7 +66,25 @@ class CustomTextSerializer
     {
         $props = fluent($node->props);
 
+        $type = $props->get('type');
 
-        dd($props->toArray());
+        return match ($type) {
+            'rule' => $this->renderWith(RuleMention::class, [
+                'title' => $props->get('title'),
+                'value' => $props->get('value'),
+            ]),
+            'file' => $this->renderWith(FileMention::class, [
+                'title' => $props->get('title'),
+                'value' => $props->get('value'),
+            ]),
+            default => throw new \Exception('Unknown mention type: ' . $type),
+        };
+    }
+
+    private function renderWith(string $class, array $props)
+    {
+        $component = new $class(...$props);
+
+        return $component->render()->render();
     }
 }

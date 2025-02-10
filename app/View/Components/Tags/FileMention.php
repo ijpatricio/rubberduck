@@ -8,10 +8,15 @@ use Illuminate\View\Component;
 
 class FileMention extends Component
 {
+    public string $contents;
+
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public function __construct(
+        public string $title,
+        public string $value,
+    )
     {
         //
     }
