@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Actions\RenderPrompt;
 use Ijpatricio\Mingle\Concerns\InteractsWithMingles;
 use Ijpatricio\Mingle\Contracts\HasMingles;
 use Livewire\Attributes\Lazy;
@@ -32,8 +33,8 @@ class Talk extends Component implements HasMingles
         ];
     }
 
-    public function preparePrompts()
+    public function renderPrompt($blockNoteDocument, RenderPrompt $renderPrompt)
     {
-
+        return $renderPrompt($blockNoteDocument);
     }
 }

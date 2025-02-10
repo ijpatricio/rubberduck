@@ -47,20 +47,16 @@ class PromptEditor extends Component implements HasMingles
     }
 
     #[Renderless]
-    public function findFiles($query, $basePath): array
+    public function findFiles($query, $basePath, GetFilesList $getFilesList): array
     {
-        $action = app(GetFilesList::class);
-
-        return $action($query, $basePath)
+        return $getFilesList($query, $basePath)
             ->toArray();
     }
 
     #[Renderless]
-    public function findRules($query): array
+    public function findRules($query, GetRulesList $getRulesList): array
     {
-        $action = app(GetRulesList::class);
-
-        return $action($query)
+        return $getRulesList($query)
             ->toArray();
     }
 }

@@ -1,0 +1,123 @@
+[
+    {
+        "id": "b1173b02-425f-48d4-ad93-5b754858c2cb",
+        "type": "paragraph",
+        "props": {
+            "textColor": "default",
+            "backgroundColor": "default",
+            "textAlignment": "left"
+        },
+        "content": [
+            {
+                "type": "text",
+                "text": "You are a fantastic Laravel developer",
+                "styles": []
+            }
+        ],
+        "children": []
+    },
+    {
+        "id": "f043509b-d495-436e-9b73-a2a3ee17a29f",
+        "type": "paragraph",
+        "props": {
+            "textColor": "default",
+            "backgroundColor": "default",
+            "textAlignment": "left"
+        },
+        "content": [
+            {
+                "type": "mention",
+                "props": {
+                    "title": "first-one.txt",
+                    "type": "rule",
+                    "value": "first-one.txt"
+                }
+            },
+            {
+                "type": "text",
+                "text": "  ",
+                "styles": []
+            }
+        ],
+        "children": []
+    },
+    {
+        "id": "c508591e-6f79-4d1f-adfd-679fa804bf38",
+        "type": "paragraph",
+        "props": {
+            "textColor": "default",
+            "backgroundColor": "default",
+            "textAlignment": "left"
+        },
+        "content": [],
+        "children": []
+    },
+    {
+        "id": "e08f3ad1-9580-4d1c-853c-b37086fb8fb3",
+        "type": "paragraph",
+        "props": {
+            "textColor": "default",
+            "backgroundColor": "default",
+            "textAlignment": "left"
+        },
+        "content": [
+            {
+                "type": "text",
+                "text": "I'm having this error: Exception: bla bla",
+                "styles": []
+            }
+        ],
+        "children": []
+    },
+    {
+        "id": "466b9ad6-acab-4b2e-a1bb-d3ca4fad6dc1",
+        "type": "paragraph",
+        "props": {
+            "textColor": "default",
+            "backgroundColor": "default",
+            "textAlignment": "left"
+        },
+        "content": [
+            {
+                "type": "mention",
+                "props": {
+                    "title": "app\/Casts\/ExchangeRateCast.php",
+                    "type": "file",
+                    "value": "app\/Casts\/ExchangeRateCast.php"
+                }
+            }
+        ],
+        "children": []
+    },
+    {
+        "id": "b54aca38-f970-4f8c-a4c3-38386f7531e1",
+        "type": "paragraph",
+        "props": {
+            "textColor": "default",
+            "backgroundColor": "default",
+            "textAlignment": "left"
+        },
+        "content": [
+            {
+                "type": "mention",
+                "props": {
+                    "title": "app\/Helpers\/CommonFields.php",
+                    "type": "file",
+                    "value": "app\/Helpers\/CommonFields.php"
+                }
+            }
+        ],
+        "children": []
+    },
+    {
+        "id": "26da6273-427d-48eb-8010-6f62b0e33648",
+        "type": "paragraph",
+        "props": {
+            "textColor": "default",
+            "backgroundColor": "default",
+            "textAlignment": "left"
+        },
+        "content": [],
+        "children": []
+    }
+]

@@ -2,6 +2,7 @@ import React, {useContext} from 'react'
 import {MantineProvider, Button} from '@mantine/core'
 import {WireContext} from "./PromptEditor.jsx"
 import {Mention} from './Mention'
+import {waitForPiniaStore} from "../stores/usePromptStore.js"
 
 import {
     BlockNoteSchema,
@@ -193,21 +194,39 @@ function Editor({initialContent}) {
 
 // Main App component
 export default function App() {
+
+    const initialContent = [
+        {
+            type: "paragraph",
+            content: "Welcome to this demo!",
+        },
+        {
+            type: "paragraph",
+            content: "This is a block in the first editor",
+        },
+        {
+            type: "paragraph",
+            content: "",
+        },
+    ]
+
+    const {wire} = useContext(WireContext)
+
+    waitForPiniaStore()
+        .then(promptStore => {
+            if (wire.get('promptType') === 'systemPrompt') {
+                promptStore.systemPromptDocument = initialContent;
+            } else {
+                promptStore.newMessageDocument = initialContent;
+            }
+        })
+        .catch(error => {
+            console.error('Failed to access Pinia store:', error);
+        });
+
     return (
         <Editor
-            initialContent={[
-                {
-                    type: "paragraph",
-                    content: "Welcome to this demo!",
-                },
-                {
-                    type: "paragraph",
-                    content: "This is a block in the first editor",
-                },
-                {
-                    type: "paragraph",
-                },
-            ]}
+            initialContent={initialContent}
         />
     )
 }

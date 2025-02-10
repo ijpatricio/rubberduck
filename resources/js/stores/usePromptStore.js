@@ -90,3 +90,31 @@ export const usePromptStore = defineStore('prompt', {
         //
     },
 })
+
+
+export const waitForPiniaStore = async (maxWaitTime = 7000, interval = 100) => {
+    const startTime = Date.now();
+
+    const tryAccessStore = () => {
+        try {
+            const promptStore = usePromptStore();
+
+            return promptStore; // If successful, return the store
+        } catch (error) {
+            if (error.message.includes('no active Pinia')) {
+                return null; // Store not ready yet
+            }
+            throw error; // Rethrow if it's a different error
+        }
+    };
+
+    while (Date.now() - startTime < maxWaitTime) {
+        const store = tryAccessStore();
+        if (store) {
+            return store; // Store is available
+        }
+        await new Promise(resolve => setTimeout(resolve, interval));
+    }
+
+    throw new Error('Timeout: Pinia store not available after 10 seconds');
+};

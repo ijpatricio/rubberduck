@@ -37,7 +37,7 @@
 <script>
 import MarkdownRenderer from "./MarkdownRenderer.vue"
 import Anthropic from "@anthropic-ai/sdk"
-import {usePromptStore} from "../stores/usePromptStore.js";
+import {usePromptStore} from "../stores/usePromptStore.js"
 export default {
     components: {
         MarkdownRenderer,
@@ -98,7 +98,7 @@ export default {
                         "content": [
                             {
                                 "type": "text",
-                                "text": "Make a list of the TALL stack components. Show some code examples."
+                                "text": "Make a list of the .NET blazor stack components. Show some code examples."
                             }
                         ]
                     }
@@ -120,10 +120,7 @@ export default {
             }
         },
         async preparePrompts() {
-            const payload = {
-                systemPrompt: this.promptStore.systemPrompt,
-                newMessage: this.promptStore.newMessage,
-            }
+            this.wire.call('renderPrompt', this.promptStore.systemPromptDocument)
 
         },
     },
