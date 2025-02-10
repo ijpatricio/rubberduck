@@ -1,7 +1,14 @@
 <div class="m-10">
-
     <div>
-        <h1 class="text-3xl font-bold">System Prompt</h1>
+        <h1 class="text-3xl font-bold">Project</h1>
+
+        <div>
+            {{ env('PROJECT_BASE_PATH', 'Project not defined in .env file') }}
+        </div>
+    </div>
+
+    <div class="mt-12">
+        <h1 class="text-xl font-bold">System Prompt</h1>
 
         <div class="mt-2 flex gap-4">
             <p class="text-gray-500">
@@ -22,7 +29,7 @@
     <livewire:prompt-editor prompt-type="systemPrompt"/>
 
     <div class="mt-16">
-        <h1 class="text-3xl font-bold">Send a message</h1>
+        <h1 class="text-xl font-bold">Send a message</h1>
 
         <div class="mt-2 flex gap-4">
             <p class="text-gray-500"></p>
@@ -36,6 +43,6 @@
 
     <livewire:prompt-editor prompt-type="newMessage"/>
 
-    <livewire:talk/>
+    <livewire:talk />
 
 </div>
