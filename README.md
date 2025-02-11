@@ -4,6 +4,8 @@ Your rubber duck is a good listener. You can talk to it about your code, line by
 Provide file contents, in bulk, file trees, give it custom operations, and it will listen to you!
 
 
+## Launched because of a Live Stream
+
 ## Installation
 
 ```bash
