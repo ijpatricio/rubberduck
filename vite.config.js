@@ -6,6 +6,9 @@ import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
+    server: {
+        port: 5199,
+    },
     resolve: {
         alias: {
             "@mingle": path.resolve(__dirname, "/vendor/ijpatricio/mingle/resources/js"),
