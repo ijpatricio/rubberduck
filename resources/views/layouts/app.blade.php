@@ -9,9 +9,7 @@
     @mingles
     @vite(['resources/css/app.css'])
 </head>
-<body class="min-h-screen font-sans antialiased bg-base-200/50 dark:bg-base-200">
-
+<body>
     {{ $slot }}
-
 </body>
 </html>

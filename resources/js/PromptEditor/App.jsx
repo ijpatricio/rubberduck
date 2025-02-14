@@ -89,6 +89,12 @@ function Editor({initialContent}) {
         initialContent: blocks,
     })
 
+    window.Livewire.on('clearNewMessage', () => {
+        if (wire.get('promptType') === 'new_message') {
+            editor.removeBlocks(editor.document)
+        }
+    })
+
     const getMentionMenuItems = async (editor, query, type) => {
 
         let items
@@ -236,12 +242,21 @@ function Editor({initialContent}) {
                 </div>
             </div>
 
-            {(wire.get('promptType') === 'system_prompt') && <div className={'mt-4'}>
+            {(wire.get('promptType') === 'system_prompt') && <div className={'flex justify-end mt-4'}>
                 <button
                     className={'btn btn-sm btn-primary'}
                     onClick={() => window.Livewire.dispatch('setSystemPrompt')}
                 >
                     Set system prompt
+                </button>
+            </div>}
+
+            {(wire.get('promptType') === 'new_message') && <div className={'flex justify-end mt-4'}>
+                <button
+                    className={'btn btn-sm btn-primary'}
+                    onClick={() => window.Livewire.dispatch('sendMessage')}
+                >
+                    Send Message
                 </button>
             </div>}
         </div>

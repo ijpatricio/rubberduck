@@ -1,35 +1,38 @@
 <template>
     <div>
+        <div class="flex justify-center mt-6">Messages</div>
 
-        <div class="flex justify-center my-6">Messages</div>
-
-        <div class="mt-2 flex justify-end">
-            <button class="btn btn-primary btn-sm" @click="sendMessage">
-                Send message
-            </button>
-        </div>
-
-        <div v-for="message in chatStore.payload.messages" class="mt-2 flex justify-end">
+        <div v-for="message in chatStore.payload.messages" class="mt-2 flex w-full">
             <div
-                v-for="content in message.content"
-                class="max-w-3xl flex"
+                class="w-full flex"
+                :class="message.role === 'user' ? 'justify-end' : 'justify-start'"
             >
-                <MarkdownRenderer class="mt-10" :source="content.text"/>
+                <div v-for="content in message.content">
+                    <MarkdownRenderer
+                        class="mt-4 max-w-4xl"
+                        :source="message.role === 'user' ? content.text.substring(0, 240) + '...' : content.text"
+                    />
+                </div>
             </div>
         </div>
 
-        <button class="btn btn-xs btn-link" @click="savePayload"> Save Payload to localstorage</button>
-        <button class="btn btn-xs btn-link" @click="loadPayload"> Load Payload </button>
-        <pre v-text="chatStore.payload"></pre>
-
-
-        <!-- Prompt text previews -->
-        <div class="mt-8">
-            <div>System Prompt:</div>
-            <textarea class="p-4" readonly disabled cols="80" rows="20">{{ chatStore.payload.system }}</textarea>
+        <div v-show="1 || chatStore.payload.messages.length > 0" class="mt-6 flex justify-center">
+            <button class="btn btn-xs btn-link" @click="savePayload"> Save Payload to localstorage</button>
+            <button class="btn btn-xs btn-link" @click="loadPayload"> Load Payload </button>
         </div>
-        <div class="flex justify-end">
-            <textarea v-for="message in chatStore.payload.messages" class="p-4" readonly disabled cols="80" rows="20">{{ message }}</textarea>
+
+        <div v-if="false">
+            <pre v-text="chatStore.payload"></pre>
+
+            <!-- Prompt text previews -->
+            <div class="mt-8">
+                <div>System Prompt:</div>
+                <textarea class="p-4" readonly disabled cols="80" rows="20">{{ chatStore.payload.system }}</textarea>
+            </div>
+            <div class="flex justify-end">
+                <textarea v-for="message in chatStore.payload.messages" class="p-4" readonly disabled cols="80"
+                          rows="20">{{ message }}</textarea>
+            </div>
         </div>
     </div>
 </template>
@@ -77,6 +80,7 @@ export default {
         this.prepareClient()
 
         window.Livewire.on('setSystemPrompt', this.setSystemPrompt)
+        window.Livewire.on('sendMessage', this.sendMessage)
     },
     methods: {
 
@@ -90,8 +94,9 @@ export default {
         },
 
         async sendMessage() {
-            if (this.chatStore.payload.system === '') {
-                alert('System prompt is empty')
+            if (this.chatStore.payload.messages.length === 0) {
+                alert('System prompt is empty. Aborting.')
+                return
             }
 
             // Render user message
@@ -99,11 +104,12 @@ export default {
 
             this.chatStore.addUserMessage(newMessageAsText)
 
+            window.Livewire.dispatch('clearNewMessage')
+
             await this.chatStore.sendMessage()
         },
 
         setSystemPrompt() {
-            alert('yes')
             this.wire
                 .call('renderPrompt', storeAccessor.state.systemPrompt)
                 .then((systemPromptAsText) => this.chatStore.payload.system = systemPromptAsText)
