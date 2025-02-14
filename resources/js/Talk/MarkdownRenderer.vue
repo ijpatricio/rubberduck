@@ -42,5 +42,5 @@ export default {
 </script>
 
 <template>
-    <div class="border p-6 rounded-lg typography" v-html="markdown.render(source)" />
+    <div class="bg-gray-900 border border-gray-700 p-6 rounded-lg typography" v-html="markdown.render(source)" />
 </template>

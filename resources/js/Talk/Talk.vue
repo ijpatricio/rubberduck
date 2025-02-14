@@ -1,27 +1,37 @@
 <template>
     <div>
-        <div class="flex justify-center mt-6">Messages</div>
+        <div class="mt-4 flex justify-end">
+            <div class="flex gap-2">
+                <div>System prompt ready: </div>
+                <span v-if="chatStore.payload.system.length > 0"> ✅ </span>
+                <span v-else> ❌ </span>
+            </div>
+        </div>
 
-        <div v-for="message in chatStore.payload.messages" class="mt-2 flex w-full">
-            <div
-                class="w-full flex"
-                :class="message.role === 'user' ? 'justify-end' : 'justify-start'"
-            >
-                <div v-for="content in message.content">
-                    <MarkdownRenderer
-                        class="mt-4 max-w-4xl"
-                        :source="message.role === 'user' ? content.text.substring(0, 240) + '...' : content.text"
-                    />
+        <h1 class="text-xl font-bold">Messages</h1>
+
+        <div class="mt-4 p-4 border rounded-lg bg-gray-800 border-gray-600 min-h-50 flex flex-col gap-4">
+            <div v-for="message in chatStore.payload.messages">
+                <div class="w-full flex " :class="message.role === 'user' ? 'justify-end' : 'justify-start'">
+                    <div v-for="content in message.content">
+                        <MarkdownRenderer
+                            class="max-w-4xl"
+                            :source="message.role === 'user' ? content.text.substring(0, 240) + '...' : content.text"
+                        />
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div v-show="1 || chatStore.payload.messages.length > 0" class="mt-6 flex justify-center">
+        <div class="mt-2 mb-8 flex justify-end">
             <button class="btn btn-xs btn-link" @click="savePayload"> Save Payload to localstorage</button>
             <button class="btn btn-xs btn-link" @click="loadPayload"> Load Payload </button>
         </div>
 
-        <div v-if="false">
+        <h1 class="mt-8 mb-4 text-xl font-bold">New message</h1>
+
+        <!-- Debug purposes -->
+        <div v-if="0">
             <pre v-text="chatStore.payload"></pre>
 
             <!-- Prompt text previews -->
@@ -94,7 +104,7 @@ export default {
         },
 
         async sendMessage() {
-            if (this.chatStore.payload.messages.length === 0) {
+            if (this.chatStore.payload.system.length === 0) {
                 alert('System prompt is empty. Aborting.')
                 return
             }
@@ -112,7 +122,9 @@ export default {
         setSystemPrompt() {
             this.wire
                 .call('renderPrompt', storeAccessor.state.systemPrompt)
-                .then((systemPromptAsText) => this.chatStore.payload.system = systemPromptAsText)
+                .then((systemPromptAsText) => {
+                    this.chatStore.payload.system = systemPromptAsText
+                })
                 .catch((error) => alert(error))
         },
 

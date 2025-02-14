@@ -158,6 +158,7 @@ function Editor({initialContent}) {
         }
     }
 
+    let initialCheckDone = false
     // After loading the Initial content, propagate it to the store
     useEffect(() => {
         if (editor) {
@@ -165,6 +166,17 @@ function Editor({initialContent}) {
             Promise.resolve().then(() => {
                 propagateContentToStore()
             })
+
+            if (wire.get('promptType') === 'system_prompt' && !initialCheckDone) {
+                initialCheckDone = true
+
+                if (editor.document.length > 0) {
+                    // Forcing to run after next render, so that the Store commits new state
+                    setTimeout(() => {
+                        window.Livewire.dispatch('setSystemPrompt')
+                    }, 0) // Dispatching after the next render cycle
+                }
+            }
         }
     }, [editor])
 
