@@ -32,7 +32,7 @@
         <h1 class="mt-8 mb-4 text-xl font-bold">New message</h1>
 
         <!-- Debug purposes -->
-        <div v-if="0">
+        <div v-if="1">
             <pre v-text="chatStore.payload"></pre>
 
             <!-- Prompt text previews -->

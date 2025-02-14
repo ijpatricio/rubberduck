@@ -127,6 +127,14 @@ function Editor({initialContent}) {
                     value: item.key,
                 }))
                 break
+            case '&':
+
+                items = [{
+                    type: 'command',
+                    title: 'All files list',
+                    value: 'all_files_list',
+                }]
+                break
             default:
                 alert('Unknown mention type')
         }
@@ -220,6 +228,11 @@ function Editor({initialContent}) {
                     triggerCharacter={'%'}
                     getItems={async (query) => filterSuggestionItems(await getMentionMenuItems(editor, query, '%'), query)}
                 />
+
+                <SuggestionMenuController
+                    triggerCharacter={'&'}
+                    getItems={async (query) => filterSuggestionItems(await getMentionMenuItems(editor, query, '&'), query)}
+                />
             </BlockNoteView>
 
             <div className={'flex items-center gap-4'}>
@@ -251,6 +264,7 @@ function Editor({initialContent}) {
                     <div><span className="py-0.5 px-0.5 ounded font-extrabold">/</span> Slash Menu</div>
                     <div><span className="py-0.5 px-0.5 ounded font-extrabold">@</span> to refer a File</div>
                     <div><span className="py-0.5 px-0.5 ounded font-extrabold">#</span> to refer a Rule</div>
+                    <div><span className="py-0.5 px-0.5 ounded font-extrabold">&</span> to refer a Command</div>
                 </div>
             </div>
 

@@ -12,7 +12,7 @@ class GetFilesList
     /**
      * @return Collection<string>
      */
-    public function __invoke(string $query, string $basePath): Collection
+    public function __invoke(string $query, string $basePath, bool $onlyFilesList = false): Collection
     {
         if (!File::exists($basePath)) {
             dd("The configured Path [{$basePath}] does not exist!");
@@ -36,12 +36,18 @@ class GetFilesList
             )
         );
 
-        return $files
+        $files = $files
             ->map(
                 fn(SplFileInfo $file) => str($file->getRealPath())
                     ->replace($basePath, '')
                     ->value()
-            )
+            );
+
+        if ($onlyFilesList) {
+            return $files->values();
+        };
+
+        return $files
             ->filter(function (string $file) use ($query) {
 
                 // If no search, return all files

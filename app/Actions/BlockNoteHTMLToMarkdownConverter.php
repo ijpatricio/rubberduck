@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\RubberDuck;
 use App\View\Components\Tags\FileMention;
 use App\View\Components\Tags\RuleMention;
 use App\View\Components\Tags\ScopeMention;
@@ -72,7 +73,7 @@ class BlockNoteHTMLToMarkdownConverter
             return '';
         }
 
-        $level = (int) substr($heading->nodeName, 1);
+        $level = (int)substr($heading->nodeName, 1);
         $text = $heading->textContent;
 
         return str_repeat('#', $level) . ' ' . $text;
@@ -148,6 +149,7 @@ class BlockNoteHTMLToMarkdownConverter
                 'title' => $title,
                 'value' => $value,
             ]),
+            'command' => $this->runCommand($title, $value),
             default => $span->textContent,
         };
     }
@@ -157,5 +159,27 @@ class BlockNoteHTMLToMarkdownConverter
         $component = new $class(...$props);
 
         return $component->render()->render();
+    }
+
+    protected function runCommand(string $title, string $value): string
+    {
+        $projectBasePath = app()->make(RubberDuck::PROJECT_PATH);
+
+        return match ($value) {
+            'all_files_list' => $this->allFilesList($projectBasePath),
+            default => throw new \Exception("Command {$title} [{$value}] not found"),
+        };
+    }
+
+    protected function allFilesList($projectBasePath)
+    {
+        return resolve(GetFilesList::class)(
+            query: '',
+            basePath: $projectBasePath,
+            onlyFilesList: true,
+        )
+            ->prepend(PHP_EOL)
+            ->push(PHP_EOL)
+            ->implode(PHP_EOL);
     }
 }
