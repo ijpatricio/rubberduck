@@ -22,13 +22,14 @@
 
         </div>
 
-        <x-shortcuts-hint />
-
     </div>
 
     <div class="h-4"></div>
 
-    <livewire:prompt-editor prompt-type="{{ PromptEditorType::SYSTEM_PROMPT->value }}"/>
+    <div class="max-w-4xl">
+        <livewire:prompt-editor prompt-type="{{ PromptEditorType::SYSTEM_PROMPT->value }}"/>
+    </div>
+
 
     <div class="mt-16">
         <h1 class="text-xl font-bold">Send a message</h1>
@@ -36,8 +37,6 @@
         <div class="mt-2 flex gap-4">
             <p class="text-gray-500"></p>
         </div>
-
-        <x-shortcuts-hint />
 
     </div>
 

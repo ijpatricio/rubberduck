@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Actions\GetFilesList;
 use App\Actions\GetRulesList;
+use App\Actions\GetScopeList;
 use Ijpatricio\Mingle\Concerns\InteractsWithMingles;
 use Ijpatricio\Mingle\Contracts\HasMingles;
 use Livewire\Attributes\Lazy;
@@ -57,6 +58,13 @@ class PromptEditor extends Component implements HasMingles
     public function findRules($query, GetRulesList $getRulesList): array
     {
         return $getRulesList($query)
+            ->toArray();
+    }
+
+    #[Renderless]
+    public function findScopes($query, $basePath, GetScopeList $getScopeList): array
+    {
+        return $getScopeList($query, $basePath)
             ->toArray();
     }
 }

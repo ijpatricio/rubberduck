@@ -1,34 +1,41 @@
 <template>
     <div>
-        <div class="mt-12">
-            <button class="btn btn-primary btn-sm" @click="preparePrompts">
-                Prepare Prompts
+
+        <div class="flex justify-center my-6">Messages</div>
+
+        <div class="mt-2 flex justify-end">
+            <button class="btn btn-primary btn-sm" @click="sendMessage">
+                Send message
             </button>
         </div>
+
+        <div v-for="message in chatStore.payload.messages" class="mt-2 flex justify-end">
+            <div
+                v-for="content in message.content"
+                class="max-w-3xl flex"
+            >
+                <MarkdownRenderer class="mt-10" :source="content.text"/>
+            </div>
+        </div>
+
+        <button class="btn btn-xs btn-link" @click="savePayload"> Save Payload to localstorage</button>
+        <button class="btn btn-xs btn-link" @click="loadPayload"> Load Payload </button>
+        <pre v-text="chatStore.payload"></pre>
+
 
         <!-- Prompt text previews -->
         <div class="mt-8">
             <div>System Prompt:</div>
             <textarea class="p-4" readonly disabled cols="80" rows="20">{{ chatStore.payload.system }}</textarea>
         </div>
-        <div class="flex justify-center my-6">Messages</div>
         <div class="flex justify-end">
             <textarea v-for="message in chatStore.payload.messages" class="p-4" readonly disabled cols="80" rows="20">{{ message }}</textarea>
         </div>
-        <div class="mt-2 flex justify-end">
-            <button class="btn btn-primary btn-sm" @click="sendPayload">
-                Send message
-            </button>
-        </div>
-
-        <!-- Reply -->
-        <MarkdownRenderer class="mt-10" :source="streamedResponse"/>
     </div>
 </template>
 
 <script>
 import MarkdownRenderer from "./MarkdownRenderer.vue"
-import Anthropic from "@anthropic-ai/sdk"
 import {useChatStore} from "../stores/useChatStore.js"
 import usePromptEditorsStore, {storeAccessor} from '../stores/promptEditorsStore.js'
 import {ref, onUnmounted} from "vue"
@@ -68,66 +75,47 @@ export default {
     },
     mounted() {
         this.prepareClient()
+
+        window.Livewire.on('setSystemPrompt', this.setSystemPrompt)
     },
     methods: {
+
         prepareClient() {
-            this.client = new Anthropic({
+            this.chatStore.prepareClient({
                 apiKey: this.mingleData['api_key'],
-                dangerouslyAllowBrowser: true,
+                model: this.mingleData.model,
+                max_tokens: 4096,
+                temperature: 0
             })
-            this.chatStore.payload.model = this.mingleData.model
-            this.chatStore.payload.max_tokens = 4096
-            this.chatStore.payload.temperature = 0
         },
-        async sendPayload() {
 
-            this.streamedResponse = ''
-
-
-            // Create a streaming message
-            const stream = await this.client.messages.create({...this.chatStore.payload})
-
-            // Process the stream
-            try {
-                for await (const messageChunk of stream) {
-                    if (messageChunk.type === 'content_block_delta') {
-                        this.streamedResponse += messageChunk.delta.text
-                    }
-                }
-            } catch (error) {
-                console.error('Streaming error:', error)
+        async sendMessage() {
+            if (this.chatStore.payload.system === '') {
+                alert('System prompt is empty')
             }
+
+            // Render user message
+            const newMessageAsText = await this.wire.call('renderPrompt', storeAccessor.state.newMessage)
+
+            this.chatStore.addUserMessage(newMessageAsText)
+
+            await this.chatStore.sendMessage()
         },
-        async preparePrompts() {
 
-            const systemPromptHTML = storeAccessor.state.systemPrompt
+        setSystemPrompt() {
+            alert('yes')
+            this.wire
+                .call('renderPrompt', storeAccessor.state.systemPrompt)
+                .then((systemPromptAsText) => this.chatStore.payload.system = systemPromptAsText)
+                .catch((error) => alert(error))
+        },
 
-            const newMessageHTML = storeAccessor.state.newMessage
+        savePayload() {
+            localStorage.setItem('full_payload', JSON.stringify(this.chatStore.payload))
+        },
 
-            Promise.all([
-
-                this.wire.call('renderPrompt', systemPromptHTML),
-
-                this.wire.call('renderPrompt', newMessageHTML),
-
-            ]).then(([systemPromptAsText, newMessageAsText]) => {
-
-                this.chatStore.payload.system = systemPromptAsText
-
-                // For now, just ready to send first message. There's a lot o business logic to be added here
-                this.chatStore.payload.messages = []
-
-                this.chatStore.payload.messages.push({
-                    role: 'user',
-                    content: [
-                        {
-                            type: 'text',
-                            text: newMessageAsText,
-                        }
-                    ]
-                })
-
-            })
+        loadPayload() {
+            this.chatStore.payload = JSON.parse(localStorage.getItem('full_payload'))
         },
     },
 }

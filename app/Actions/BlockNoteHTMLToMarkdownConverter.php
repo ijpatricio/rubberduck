@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\View\Components\Tags\FileMention;
 use App\View\Components\Tags\RuleMention;
+use App\View\Components\Tags\ScopeMention;
 use DOMDocument;
 use DOMElement;
 use DOMXPath;
@@ -140,6 +141,10 @@ class BlockNoteHTMLToMarkdownConverter
                 'value' => $value,
             ]),
             'file' => $this->renderWith(FileMention::class, [
+                'title' => $title,
+                'value' => $value,
+            ]),
+            'scope' => $this->renderWith(ScopeMention::class, [
                 'title' => $title,
                 'value' => $value,
             ]),

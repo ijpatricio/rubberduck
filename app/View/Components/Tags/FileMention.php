@@ -4,6 +4,7 @@ namespace App\View\Components\Tags;
 
 use App\RubberDuck;
 use Closure;
+use File;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Str;
 use Illuminate\View\Component;
@@ -24,11 +25,11 @@ class FileMention extends Component
 
         $path = $projectBasePath . Str::start($this->value, '/');
 
-        if(\File::exists($this->value)) {
+        if(! File::exists($path)) {
             throw new \Exception("File [{$path}] not found");
         }
 
-        $this->contents = \File::get($path);
+        $this->contents = File::get($path);
     }
 
     /**

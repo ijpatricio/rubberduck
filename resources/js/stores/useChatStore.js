@@ -1,15 +1,18 @@
 import { defineStore } from 'pinia'
+import Anthropic from "@anthropic-ai/sdk";
 
 export const useChatStore = defineStore('chat', {
 
     state: () => ({
 
-        // This is the payload that we setup and increment over time
+        client: {},
+
+        // This is the payload that we set up and increment over time
         payload: {
             model: null,
             max_tokens: null,
             temperature: null,
-            system: null,
+            system: '',
             messages: [],
             stream: true,
         },
@@ -45,11 +48,86 @@ export const useChatStore = defineStore('chat', {
     }),
 
     getters: {
-        //
+        latestMessage() {
+            return this.payload.messages.at(this.payload.messages.length - 1)
+        }
     },
 
     actions: {
-        //
+
+        prepareClient(options = {}) {
+            this.client = new Anthropic({
+                apiKey: options.apiKey,
+                dangerouslyAllowBrowser: true,
+            })
+            this.payload.model = options.model
+            this.payload.max_tokens = options.max_tokens
+            this.payload.temperature = options.temperature
+        },
+
+        addUserMessage(messageText) {
+
+            if (this.payload.messages.length > 0 && this.latestMessage?.role === 'user') {
+                alert('You can only send one message at a time')
+                return
+            }
+
+            this.payload.messages.push({
+                role: 'user',
+                content: [
+                    {
+                        type: 'text',
+                        text: messageText,
+                    }
+                ]
+            })
+        },
+
+        addAssistantMessage(messageText) {
+
+            if (this.latestMessage?.role === 'assistant') {
+                alert('Something went wrong - Cannot add two consecutive assistant messages.')
+                return
+            }
+
+            this.payload.messages.push({
+                role: 'assistant',
+                content: [
+                    {
+                        type: 'text',
+                        text: messageText,
+                    }
+                ]
+            })
+        },
+
+        incrementLatestAssistantMessage(messageText) {
+            const latestMessage = this.payload.messages.at(this.payload.messages.length - 1)
+            latestMessage.content[0].text += messageText
+        },
+
+        async sendMessage () {
+            // When stream starts, we'll empty the message and incrementing its contents
+            let streamStarted = false
+
+            // Create a streaming message
+            const stream = await this.client.messages.create({...this.payload})
+
+            // Process the stream
+            try {
+                for await (const messageChunk of stream) {
+                    if (messageChunk.type === 'content_block_delta') {
+                        if (! streamStarted) {
+                            this.addAssistantMessage(messageChunk.delta.text)
+                            streamStarted = true
+                        }
+                        this.incrementLatestAssistantMessage(messageChunk.delta.text)
+                    }
+                }
+            } catch (error) {
+                console.error('Streaming error:', error)
+            }
+        },
     },
 })
 
