@@ -28,6 +28,11 @@ export default {
             type: String,
             required: true,
         },
+        role: {
+            type: String,
+            required: false,
+            default: 'user',
+        }
     },
 
     // This is a template for development purposes only. Copy and paste to the template at will
@@ -42,5 +47,9 @@ export default {
 </script>
 
 <template>
-    <div class="bg-gray-900 border border-gray-700 p-6 rounded-lg typography" v-html="markdown.render(source)" />
+    <div
+        class="border border-gray-900 p-6 rounded-lg typography"
+        :class="role === 'user' ? 'bg-blue-800' : 'bg-gray-700'"
+        v-html="markdown.render(source)"
+    />
 </template>

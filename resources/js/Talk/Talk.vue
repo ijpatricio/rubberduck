@@ -16,6 +16,7 @@
                     <div v-for="content in message.content">
                         <MarkdownRenderer
                             class="max-w-4xl"
+                            :role="message.role"
                             :source="message.role === 'user' ? content.text.substring(0, 240) + '...' : content.text"
                         />
                     </div>
