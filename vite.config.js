@@ -6,6 +6,10 @@ import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
+    define: { //wasn't working without this, maybe there is a more elegant fix, but I don't know too much about vite
+        'process.env.IS_PREACT': JSON.stringify(false),
+        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+    },
     server: {
         port: 5199,
     },

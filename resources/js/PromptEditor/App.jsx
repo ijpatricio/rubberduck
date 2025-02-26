@@ -86,7 +86,10 @@ function Editor({initialContent}) {
     const editor = useCreateBlockNote({
         schema,
         sideMenuDetection: "editor",
-        initialContent: blocks,
+
+        _tiptapOptions: {
+            content: JSON.parse(localStorage.getItem('tiptapdoc'))
+        }
     })
 
     window.Livewire.on('clearNewMessage', () => {
@@ -200,6 +203,7 @@ function Editor({initialContent}) {
                 editor={editor}
                 formattingToolbar={false}
                 onChange={onEditorChange}
+                sideMenu={false}
             >
                 <SuggestionMenuController
                     triggerCharacter={"/"}
@@ -285,6 +289,13 @@ function Editor({initialContent}) {
                     Send Message
                 </button>
             </div>}
+
+            <button
+                className={'btn btn-sm btn-primary btn-outline'}
+                onClick={() => localStorage.setItem('tiptapdoc', JSON.stringify(editor._tiptapEditor.state.doc))}
+            >
+                Render TipTap
+            </button>
         </div>
     )
 }

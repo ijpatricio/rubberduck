@@ -67,4 +67,10 @@ class PromptEditor extends Component implements HasMingles
         return $getScopeList($query, $basePath)
             ->toArray();
     }
+
+    #[Renderless]
+    public function renderTipTap($document)
+    {
+        dd($document);
+    }
 }
